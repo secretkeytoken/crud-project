@@ -7,7 +7,7 @@ const appConfig = {
   appCreator: "@agrotreeledger",
   appBaseUrl: IS_PRODUCTION
     ? new URL(`https://${process.env.NEXT_PUBLIC_HOST}`)
-    : new URL(`http://localhost:${process.env.PORT || 3000}`),
+    : new URL(`http://localhost:${process.env.PORT || 3005}`),
 };
 
 export default appConfig;

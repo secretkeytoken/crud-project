@@ -27,7 +27,7 @@ export default async function Image() {
           display: "flex",
           textAlign: "center",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           flexDirection: "row",
           flexWrap: "nowrap",
           backgroundColor: "#083624",
@@ -36,29 +36,34 @@ export default async function Image() {
           backgroundImage:
             "radial-gradient(circle at 25px 25px, lightgray 2%, transparent 0%), radial-gradient(circle at 75px 75px, lightgray 2%, transparent 0%)",
           backgroundSize: "100px 100px",
-          padding: "50px",
+          padding: "24px",
         }}
       >
         <div
           style={{
-            flex: "1",
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
             justifyContent: "center",
+            alignItems: "center",
+            textAlign: "left",
+            flex: "1",
+            padding: "24px",
           }}
         >
-          <div tw="flex w-full max-w-sm flex-1 flex-col overflow-hidden bg-white shadow-md">
+          <div tw="flex overflow-hidden bg-white shadow-md w-[300px] h-[300px] rounded-lg justify-center">
             <div tw="flex justify-center overflow-hidden rounded-lg p-4">
-              <div tw="apsect-square flex w-full items-center justify-center rounded-lg bg-gray-100">
+              <div tw="flex w-full items-center justify-center rounded-lg bg-gray-100">
                 <img
                   src={`${appConfig.appBaseUrl}/brand/logo-dark.png`}
-                  alt={appConfig.appTitle}
-                  className="h-auto w-full rounded-lg object-cover"
+                  alt={"logo"}
+                  width={300}
+                  height={300}
                 />
               </div>
             </div>
           </div>
         </div>
+
         <div
           style={{
             display: "flex",
@@ -71,7 +76,7 @@ export default async function Image() {
         >
           <h2
             style={{
-              fontSize: "40px",
+              fontSize: "36px",
               fontWeight: "bold",
             }}
           >
