@@ -54,7 +54,7 @@ export default async function Image() {
             <div tw="flex justify-center overflow-hidden rounded-lg p-4">
               <div tw="flex w-full items-center justify-center rounded-lg bg-gray-100">
                 <img
-                  src={`${appConfig.appBaseUrl}/brand/logo-dark.png`}
+                  src={`https://agrotree-app.vercel.app/brand/logo-dark.png`}
                   alt={"logo"}
                   width={300}
                   height={300}
