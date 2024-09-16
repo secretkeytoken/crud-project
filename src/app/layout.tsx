@@ -42,8 +42,14 @@ export default function RootLayout({
         colorScheme: "dark",
       }}
     >
-      <body className={cn(inter.className, manrope.className, "antialiased")}>
-        <main className="min-h-screen">
+      <body
+        className={cn(
+          inter.className,
+          manrope.className,
+          "antialiased min-h-screen"
+        )}
+      >
+        <main className="relative flex min-h-screen flex-col">
           <AppProvider>{children}</AppProvider>
         </main>
       </body>
