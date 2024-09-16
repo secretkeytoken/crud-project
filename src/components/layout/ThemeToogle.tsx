@@ -10,9 +10,7 @@ import {
 import { Sun, Moon } from "lucide-react";
 import { Button } from "../ui/button";
 
-type Props = {};
-
-const ThemeToogle: React.FC<Props> = ({}) => {
+const ThemeToogle = ({}) => {
   const { setTheme } = useTheme();
   return (
     <DropdownMenu>
