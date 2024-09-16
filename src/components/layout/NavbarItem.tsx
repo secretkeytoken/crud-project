@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { NavbarItemType } from "../../../types/Navbar.type";
+import { NavbarItemType } from "../../types/Navbar.type";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";

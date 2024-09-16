@@ -11,7 +11,7 @@ export default function Home() {
       </div>
       <div className="flex flex-col items-center justify-center gap-10">
         <div className="max-w-2xl">
-          <p className="font-medium text-center text-2xl leading-10">
+          <p className="font-medium text-center md:text-2xl md:leading-10 px-5">
             {appConfig.appDescription}
           </p>
         </div>

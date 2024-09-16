@@ -1,7 +1,15 @@
+"use client";
+import { useDashboardContext } from "@/components/providers/DashboardProvider";
 import React from "react";
 
 const DashboardPage = () => {
-  return <div>DashboardPage</div>;
+  const { selectedProject } = useDashboardContext();
+  return (
+    <div className="h-screen">
+      DashboardPage
+      <pre>{JSON.stringify(selectedProject, null, 2)}</pre>
+    </div>
+  );
 };
 
 export default DashboardPage;
