@@ -4,6 +4,7 @@ import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import appConfig from "@/lib/config";
+import AppProvider from "@/components/providers/AppProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 const manrope = Manrope({ subsets: ["latin"] });
@@ -42,7 +43,9 @@ export default function RootLayout({
       }}
     >
       <body className={cn(inter.className, manrope.className, "antialiased")}>
-        {children}
+        <main className="min-h-screen">
+          <AppProvider>{children}</AppProvider>
+        </main>
       </body>
     </html>
   );

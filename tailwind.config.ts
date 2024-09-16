@@ -10,6 +10,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        darkGreen: "#083624",
+        lightGrey: "#c2c2c2",
+        lightGreen: "#10583a",
+        brightGreen: "#87ff55",
+        deepDarkGreen: "#061212",
+        deepDarkGreen2: "#0a1e21",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
