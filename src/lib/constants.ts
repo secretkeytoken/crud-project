@@ -18,7 +18,7 @@ export const NAVBAR_ITEMS: NavbarItemType[] = [
 
 
 export const DASHBOARD_MENU = [
-  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
-  { name: "Collections", href: "/dashboard/colections", icon: Images, current: false },
-  { name: "Settings", href: "dashboard/settings", icon: Settings, current: false },
+  { name: "Overview", href: "/console", icon: HomeIcon },
+  { name: "Collections", href: "/console/colections", icon: Images },
+  { name: "Settings", href: "/console/settings", icon: Settings },
 ];

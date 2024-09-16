@@ -3,8 +3,9 @@ import { DASHBOARD_MENU } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import React from "react";
+import UserMenu from "./UserMenu";
 
-const DashboardMenu = () => {
+const ConsoleMenu = () => {
   const pathname = usePathname();
   return (
     <nav className="flex flex-1 flex-col px-4">
@@ -18,8 +19,8 @@ const DashboardMenu = () => {
                   className={cn(
                     item.href === pathname
                       ? "bg-lightGreen text-white"
-                      : "text-green-200 hover:lightGreen hover:text-white",
-                    "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+                      : "text-green-200 hover:bg-lightGreen hover:text-white",
+                    "group flex gap-x-3 rounded-md p-2 text-xs font-semibold leading-6"
                   )}
                 >
                   <item.icon
@@ -28,7 +29,7 @@ const DashboardMenu = () => {
                       item.href === pathname
                         ? "text-white"
                         : "text-green-200 group-hover:text-white",
-                      "h-6 w-6 shrink-0"
+                      "size-5 shrink-0"
                     )}
                   />
                   {item.name}
@@ -39,16 +40,11 @@ const DashboardMenu = () => {
         </li>
 
         <li className="mt-auto">
-          <a
-            href="#"
-            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-green-200 hover:bg-lightGreen hover:text-white"
-          >
-            Settings
-          </a>
+          <UserMenu />
         </li>
       </ul>
     </nav>
   );
 };
 
-export default DashboardMenu;
+export default ConsoleMenu;

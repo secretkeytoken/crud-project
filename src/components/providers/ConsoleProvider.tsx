@@ -3,7 +3,7 @@ import { ProjectItemType } from "@/types/Project.type";
 import React, { PropsWithChildren } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
-const DashboardContext = React.createContext<{
+const ConsoleContext = React.createContext<{
   selectedProject: ProjectItemType | undefined;
   setSelectedProject: (project: ProjectItemType) => void;
 }>({
@@ -11,23 +11,23 @@ const DashboardContext = React.createContext<{
   setSelectedProject: () => {},
 });
 
-const DashboardProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const ConsoleProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [selectedProject, setSelectedProject] = useLocalStorage<
     ProjectItemType | undefined
   >("project", undefined);
 
   return (
-    <DashboardContext.Provider
+    <ConsoleContext.Provider
       value={{
         selectedProject,
         setSelectedProject,
       }}
     >
       {children}
-    </DashboardContext.Provider>
+    </ConsoleContext.Provider>
   );
 };
 
-export default DashboardProvider;
+export default ConsoleProvider;
 
-export const useDashboardContext = () => React.useContext(DashboardContext);
+export const useDashboardContext = () => React.useContext(ConsoleContext);

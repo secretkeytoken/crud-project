@@ -6,17 +6,24 @@ import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import { ParticleConnectkit } from "../auth/connectkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Session } from "next-auth";
+import AuthProvider from "./AuthProvider";
 
 const queryClient = new QueryClient();
 
-const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const AppProvider: React.FC<PropsWithChildren & { session?: Session }> = ({
+  children,
+  session,
+}) => {
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <ParticleConnectkit>
-        <QueryClientProvider client={queryClient}>
-          <Toaster richColors position="bottom-right" />
-          <AppThemeProvider>{children}</AppThemeProvider>
-        </QueryClientProvider>
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <Toaster richColors position="bottom-right" />
+            <AppThemeProvider>{children}</AppThemeProvider>
+          </QueryClientProvider>
+        </AuthProvider>
       </ParticleConnectkit>
     </SessionProvider>
   );

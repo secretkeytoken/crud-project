@@ -11,7 +11,7 @@ import {
 } from "../ui/command";
 import useProjects from "@/hooks/useProjects";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { useDashboardContext } from "../providers/DashboardProvider";
+import { useDashboardContext } from "../providers/ConsoleProvider";
 import { useCopyToClipboard } from "usehooks-ts";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
         <div
           aria-expanded={open}
           className={cn(
-            "w-[288px] justify-between flex items-center h-16 hover:bg-lightGreen cursor-pointer p-3 border-b border-lightGreen text-white select-none",
+            "w-[256px] justify-between flex items-center h-16 hover:bg-lightGreen cursor-pointer p-3 border-b border-lightGreen text-white select-none",
             className
           )}
         >
@@ -43,7 +43,7 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
                     {selectedProject?.name.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="text-sm">
+                <div className="text-xs">
                   <h3 className="font-semibold">{selectedProject.name}</h3>
                   <span
                     className="text-muted-foreground cursor-pointer hover:text-white/80 flex items-center gap-1"
@@ -73,7 +73,7 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
           <ChevronsUpDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[288px] p-1">
+      <PopoverContent className="w-[256px] p-1">
         <Command>
           <CommandGroup heading="Projects">
             <CommandList>
@@ -86,13 +86,13 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
                   }}
                   className="group cursor-pointer"
                 >
-                  <div className="p-1 flex items-center gap-2 text-sm w-full">
-                    <Avatar>
+                  <div className="p-1 flex items-center gap-2 w-full">
+                    <Avatar className="size-6">
                       <AvatarFallback className="uppercase group-hover:bg-darkGreen">
                         {project.name.slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
-                    {project.name}
+                    <span className="text-xs">{project.name}</span>
                   </div>
                 </CommandItem>
               ))}
@@ -101,15 +101,15 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
           <CommandSeparator />
           <CommandGroup>
             <CommandList>
-              <CommandItem asChild className="group">
-                <div className="p-1 flex items-center gap-2 text-sm">
-                  <Plus className="h-5 w-5" />
+              <CommandItem className="group">
+                <div className="p-1 flex items-center gap-2 text-xs">
+                  <Plus className="size-4" />
                   Create new project
                 </div>
               </CommandItem>
-              <CommandItem asChild className="group">
-                <div className="p-1 flex items-center gap-2 text-sm">
-                  <List className="h-5 w-5" />
+              <CommandItem className="group">
+                <div className="p-1 flex items-center gap-2 text-xs">
+                  <List className="size-4" />
                   View all projects
                 </div>
               </CommandItem>

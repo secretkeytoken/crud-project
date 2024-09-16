@@ -15,7 +15,7 @@ export default function Home() {
             {appConfig.appDescription}
           </p>
         </div>
-        <Link href={"/dashboard"}>
+        <Link href={"/console"}>
           <Button variant={"secondary"} size={"lg"}>
             Get started
           </Button>

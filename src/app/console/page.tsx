@@ -1,5 +1,5 @@
 "use client";
-import { useDashboardContext } from "@/components/providers/DashboardProvider";
+import { useDashboardContext } from "@/components/providers/ConsoleProvider";
 import React from "react";
 
 const DashboardPage = () => {
