@@ -1,4 +1,5 @@
 "use client";
+import NewCollectionModal from "@/components/console/collections/NewCollectionModal";
 import HeaderPage from "@/components/layout/HeaderPage";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +22,7 @@ const CollectionsPage = () => {
       <HeaderPage
         title="Collections"
         description="Create and manage your collections of NFTs"
+        end={<NewCollectionModal />}
       />
       <Table>
         <TableCaption>A list of your collections.</TableCaption>
