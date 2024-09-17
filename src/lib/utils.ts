@@ -6,3 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
+export const transformIrysUrl = (url: string) => {
+  return url.replace("arweave.net/", "gateway.irys.xyz/");
+};

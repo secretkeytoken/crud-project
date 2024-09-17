@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,8 @@ import { Textarea } from "@/components/ui/textarea";
 import useUmi from "@/hooks/useUmi";
 
 import { createGenericFileFromBrowserFile } from "@metaplex-foundation/umi";
+import { testAction } from "./testAction";
+import { Loader2 } from "lucide-react";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -45,7 +47,7 @@ type Props = {
   callbackFn?: () => void;
 };
 const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
-  // const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
   const refInput = useRef<HTMLInputElement>(null);
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -60,10 +62,14 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
   const handleSubmit = useCallback(
     async (values: FormSchemaType) => {
       console.log(values);
-      const file = await createGenericFileFromBrowserFile(values.image);
-      console.log(file);
-      const x = await umi.uploader.upload([file]);
-      console.log(x);
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("website", "values.website");
+      formData.append("image", values.image);
+      await testAction(formData);
+      setLoading(false);
       callbackFn?.();
     },
     [callbackFn, umi.uploader]
@@ -184,8 +190,12 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
             </div>
           </div>
         </div>
+
         <div className="flex-none border-t">
-          <Button type="submit">Save</Button>
+          <Button type="submit">
+            {loading ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
+            Save
+          </Button>
         </div>
       </form>
     </Form>
