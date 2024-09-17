@@ -16,11 +16,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import useUmi from "@/hooks/useUmi";
 
-import { createGenericFileFromBrowserFile } from "@metaplex-foundation/umi";
-import { testAction } from "./testAction";
 import { Loader2 } from "lucide-react";
+import { createCollection } from "./_actions/createCollection.action";
+import {
+  SolanaChain,
+  usePublicClient,
+  useWallets,
+} from "@particle-network/connectkit";
+import { transformToVersionedTransaction } from "@/lib/utils";
+import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -47,6 +52,8 @@ type Props = {
   callbackFn?: () => void;
 };
 const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
+  const [primaryWallet] = useWallets();
+  const publicClient = usePublicClient<SolanaChain>();
   const [loading, setLoading] = useState(false);
   const refInput = useRef<HTMLInputElement>(null);
   const form = useForm<FormSchemaType>({
@@ -58,34 +65,58 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
       image: "",
     },
   });
-  const umi = useUmi();
+
   const handleSubmit = useCallback(
     async (values: FormSchemaType) => {
-      console.log(values);
+      if (!publicClient) return;
       setLoading(true);
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description);
-      formData.append("website", "values.website");
-      formData.append("image", values.image);
-      await testAction(formData);
-      setLoading(false);
-      callbackFn?.();
+      toast.promise(
+        new Promise(async (resolve, reject) => {
+          try {
+            const formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("description", values.description);
+            formData.append("website", "values.website");
+            formData.append("image", values.image);
+            const wallet = primaryWallet.getWalletClient<SolanaChain>();
+            const { transaction } = await createCollection(
+              wallet.publicKey.toString(),
+              formData
+            );
+
+            const signedTx = await wallet.signTransaction(
+              transformToVersionedTransaction(transaction)
+            );
+            const transactionResponse = await publicClient.sendTransaction(
+              signedTx
+            );
+
+            resolve(transactionResponse);
+          } catch (error) {
+            reject(error);
+          }
+        }),
+        {
+          loading: "Creating collection...",
+          success: (res) => {
+            console.log("Transaction sent:", res);
+            setLoading(false);
+            callbackFn?.();
+            return `Collection created successfully! tx: ${res}`;
+          },
+          error: () => {
+            setLoading(false);
+            return "Failed to create collection.";
+          },
+        }
+      );
     },
-    [callbackFn, umi.uploader]
+    [callbackFn, primaryWallet, publicClient]
   );
 
   const onUpload = () => {
     refInput?.current?.click();
   };
-
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e?.target?.files?.[0];
-  //   if (!file) return;
-  //   setImageFile(file);
-  //   const urlImage = URL.createObjectURL(file);
-  //   console.log({ file, urlImage });
-  // };
 
   return (
     <Form {...form}>
@@ -192,7 +223,7 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
         </div>
 
         <div className="flex-none border-t">
-          <Button type="submit">
+          <Button type="submit" disabled={loading} size={"lg"}>
             {loading ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
             Save
           </Button>
