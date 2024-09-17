@@ -31,22 +31,24 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
         <div
           aria-expanded={open}
           className={cn(
-            "w-[256px] justify-between flex items-center h-16 hover:bg-lightGreen cursor-pointer p-3 border-b border-lightGreen text-white select-none",
+            "w-[256px] justify-between flex items-center h-16 hover:bg-lightGreen cursor-pointer p-3 border-b border-lightGreen select-none",
             className
           )}
         >
           <div className="flex items-center gap-2">
             {selectedProject ? (
               <>
-                <Avatar>
-                  <AvatarFallback className="uppercase">
+                <Avatar className="size-7 rounded-sm">
+                  <AvatarFallback className="uppercase font-bold text-xs rounded-sm">
                     {selectedProject?.name.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-xs">
-                  <h3 className="font-semibold">{selectedProject.name}</h3>
+                  <h3 className="font-semibold text-white/80">
+                    {selectedProject.name}
+                  </h3>
                   <span
-                    className="text-muted-foreground cursor-pointer hover:text-white/80 flex items-center gap-1"
+                    className="text-white/50 cursor-pointer hover:text-white/80 flex items-center gap-1"
                     onClick={(e) => {
                       e.preventDefault();
                       copyToClipboard(selectedProject.id);
@@ -60,9 +62,11 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
               </>
             ) : (
               <>
-                {/* <Avatar>
-                  <AvatarFallback className="uppercase">PJ</AvatarFallback>
-                </Avatar> */}
+                <Avatar className="size-7 rounded-sm">
+                  <AvatarFallback className="uppercase font-bold text-xs rounded-sm">
+                    PJ
+                  </AvatarFallback>
+                </Avatar>
                 <div className="text-sm">
                   <h3 className="font-semibold">Select a project</h3>
                   <span className="text-muted-foreground">---</span>
@@ -87,8 +91,8 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
                   className="group cursor-pointer"
                 >
                   <div className="p-1 flex items-center gap-2 w-full">
-                    <Avatar className="size-6">
-                      <AvatarFallback className="uppercase group-hover:bg-darkGreen">
+                    <Avatar className="size-7 rounded-sm">
+                      <AvatarFallback className="uppercase group-hover:bg-darkGreen font-bold text-xs rounded-sm">
                         {project.name.slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>

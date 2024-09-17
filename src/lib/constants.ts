@@ -16,9 +16,8 @@ export const NAVBAR_ITEMS: NavbarItemType[] = [
   },
 ];
 
-
 export const DASHBOARD_MENU = [
   { name: "Overview", href: "/console", icon: HomeIcon },
-  { name: "Collections", href: "/console/colections", icon: Images },
+  { name: "Collections", href: "/console/collections", icon: Images },
   { name: "Settings", href: "/console/settings", icon: Settings },
 ];
