@@ -9,7 +9,7 @@ import { clusterApiUrl, Connection } from "@solana/web3.js";
 // Monkey patch the Connection prototype
 Connection.prototype.getRecentBlockhash = async function (commitment) {
     try {
-        const { blockhash, lastValidBlockHeight } = await this.getLatestBlockhash(
+        const { blockhash } = await this.getLatestBlockhash(
             commitment
         );
         const recentPrioritizationFees = await this.getRecentPrioritizationFees();
