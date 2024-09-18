@@ -35,7 +35,7 @@ const NewCollectionModal = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <NewCollectionForm />
+        <NewCollectionForm callbackFn={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

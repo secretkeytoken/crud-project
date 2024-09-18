@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, X } from "lucide-react";
 import { createCollection } from "./_actions/createCollection.action";
 import {
   SolanaChain,
@@ -26,6 +26,7 @@ import {
 } from "@particle-network/connectkit";
 import { transformToVersionedTransaction } from "@/lib/utils";
 import { toast } from "sonner";
+import { updateCollection } from "./_actions/updateCollection.action";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -37,7 +38,7 @@ const ACCEPTED_IMAGE_TYPES = [
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   description: z.string().min(2).max(500),
-  website: z.optional(z.string().url()),
+  website: z.union([z.literal(""), z.string().trim().url()]),
   image: z
     .any()
     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
@@ -73,27 +74,37 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
       if (!publicClient) return;
       setLoading(true);
       toast.promise(
-        new Promise(async (resolve, reject) => {
+        new Promise<{
+          tx: string;
+          collection: string;
+        }>(async (resolve, reject) => {
           try {
             const formData = new FormData();
             formData.append("name", values.name);
             formData.append("description", values.description);
-            formData.append("website", "values.website");
+            formData.append("website", values.website || "");
             formData.append("image", values.image);
             const wallet = primaryWallet.getWalletClient<SolanaChain>();
-            const { transaction } = await createCollection(
-              wallet.publicKey.toString(),
-              formData
-            );
+            const {
+              transaction,
+              collectionMintAddress,
+              collectionId,
+              imageUrl,
+              uri,
+            } = await createCollection(wallet.publicKey.toString(), formData);
 
             const signedTx = await wallet.signTransaction(
               transformToVersionedTransaction(transaction)
             );
-            const transactionResponse = await publicClient.sendTransaction(
-              signedTx
-            );
+            const tx = await publicClient.sendTransaction(signedTx);
 
-            resolve(transactionResponse);
+            await updateCollection(
+              collectionId,
+              wallet.publicKey.toString(),
+              imageUrl,
+              uri
+            );
+            resolve({ tx, collection: collectionMintAddress });
           } catch (error) {
             reject(error);
           }
@@ -104,7 +115,7 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
             console.log("Transaction sent:", res);
             setLoading(false);
             callbackFn?.();
-            return `Collection created successfully! tx: ${res}`;
+            return `Collection created successfully! tx: ${res.tx}`;
           },
           error: () => {
             setLoading(false);
@@ -225,13 +236,9 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
 
         <div className="flex-none">
           <div className="flex justify-end gap-5">
-            <Button type="submit" disabled={loading} size={"lg"}>
-              {loading ? (
-                <Loader2 className="size-4 mr-2 animate-spin" />
-              ) : (
-                <Save className="size-4 mr-2" />
-              )}
-              Save
+            <Button disabled={loading} size={"lg"} variant={"outline"}>
+              <X className="size-4 mr-2" />
+              Cancel
             </Button>
             <Button type="submit" disabled={loading} size={"lg"}>
               {loading ? (

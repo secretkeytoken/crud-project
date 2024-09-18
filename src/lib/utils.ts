@@ -40,6 +40,19 @@ export const transformToVersionedTransaction = (message: string) => {
   return VersionedTransaction.deserialize(tx);
 };
 
-export const truncateAddress = (address: string) => {
+export const truncateAddress = (address: string | null) => {
+  if (!address) return "";
   return address.slice(0, 6) + "..." + address.slice(-4);
+};
+
+export const formatDateToDisplay = (date: Date) => {
+  return date.toLocaleDateString();
+};
+
+export const getExplorerLink = (address: string) => {
+  return `https://explorer.solana.com/address/${address}?cluster=devnet`;
+};
+
+export const getShyftTranslatorLink = (address: string) => {
+  return `https://translator.shyft.to/address/${address}?cluster=devnet`;
 };

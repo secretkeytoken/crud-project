@@ -1,7 +1,7 @@
 "use client";
+import { getCollection } from "@/components/console/collections/_actions/getCollection.action";
 import NewCollectionModal from "@/components/console/collections/NewCollectionModal";
 import HeaderPage from "@/components/layout/HeaderPage";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,12 +11,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ImageIcon, Trash2 } from "lucide-react";
+import { formatDateToDisplay, getShyftTranslatorLink } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { ExternalLink, ImageIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const CollectionsPage = () => {
   const router = useRouter();
+
+  const { data: collections } = useQuery({
+    queryKey: ["get-collections"],
+    queryFn: () => getCollection(),
+  });
+
   return (
     <div>
       <HeaderPage
@@ -28,41 +38,70 @@ const CollectionsPage = () => {
         <TableCaption>A list of your collections.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[250px]">Name</TableHead>
+            <TableHead className="w-[300px] truncate">Name</TableHead>
             <TableHead>Collection ID</TableHead>
             <TableHead className="text-right">Number of NFTs</TableHead>
             <TableHead className="text-right">Creation date</TableHead>
-            <TableHead className="text-right"></TableHead>
+            {/* <TableHead className="text-right"></TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow
-            onClick={() => router.push(`/console/collections/1`)}
-            className="cursor-pointer"
-          >
-            <TableCell>
-              <div className="flex items-center">
-                <ImageIcon className="size-11" />
-                <span className="ml-2">John Doe</span>
-              </div>
-            </TableCell>
-            <TableCell>1</TableCell>
-            <TableCell className="text-right">1</TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
-            <TableCell className="text-right">
-              <Button
-                size={"icon"}
-                variant={"ghost"}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  alert("Delete");
-                }}
-              >
-                <Trash2 className="size-5 text-red-500/50" />
-              </Button>
-            </TableCell>
-          </TableRow>
+          {collections?.map((coll) => (
+            <TableRow
+              key={coll.publickey}
+              onClick={() =>
+                router.push(`/console/collections/${coll.publickey}`)
+              }
+              className="cursor-pointer"
+            >
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  {coll.image ? (
+                    <Image
+                      src={coll.image}
+                      width={44}
+                      height={44}
+                      alt={"collection image"}
+                      className="rounded-lg"
+                    />
+                  ) : (
+                    <ImageIcon className="size-11 rounded-lg" />
+                  )}
+                  <span className="ml-2">{coll.name}</span>
+                </div>
+              </TableCell>
+              <TableCell>
+                {coll.publickey ? (
+                  <Link
+                    href={getShyftTranslatorLink(coll.publickey)}
+                    onClick={(e) => e.stopPropagation()}
+                    target="_blank"
+                    className="text-lightGrey hover:underline flex items-center gap-1 "
+                  >
+                    {coll.publickey}
+                    <ExternalLink className="size-4" />
+                  </Link>
+                ) : null}
+              </TableCell>
+              <TableCell className="text-right">-</TableCell>
+              <TableCell className="text-right">
+                {formatDateToDisplay(coll.createdAt)}
+              </TableCell>
+              {/* <TableCell className="text-right">
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    alert("Delete");
+                  }}
+                >
+                  <Trash2 className="size-5 text-red-500/50" />
+                </Button>
+              </TableCell> */}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

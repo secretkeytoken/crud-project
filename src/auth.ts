@@ -3,12 +3,14 @@ import Credentials from "next-auth/providers/credentials";
 
 import { DefaultSession } from "next-auth";
 import { verifySignature } from "@/lib/auth-helper";
+import prisma from "./lib/db";
 
 type User = {
   id: string;
   publicKey: string;
   name: string;
   email: string;
+  isKyced: boolean;
 };
 
 declare module "next-auth" {
@@ -93,11 +95,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("Invalid signature");
         }
 
+        let user = await prisma.user.findUnique({
+          where: {
+            id: publicKey as string,
+          },
+        });
+
+        console.log("user", user);
+
+        if (!user) {
+          user = await prisma.user.create({
+            data: {
+              id: publicKey as string,
+            },
+          });
+        }
+
         return {
-          id: publicKey as string,
-          name: "leo pham",
-          email: "hongthaipro@gmail.com",
-          publicKey: publicKey as string,
+          id: user.id,
+          name: user.name || "",
+          email: user.email || "",
+          publicKey: user.id,
+          isKyced: user.isKyced,
         };
       },
     }),
