@@ -74,7 +74,7 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
               </>
             )}
           </div>
-          <ChevronsUpDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-2 size-5 shrink-0 opacity-50 text-white" />
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-[256px] p-1">

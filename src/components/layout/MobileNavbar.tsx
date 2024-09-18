@@ -14,7 +14,7 @@ import { MenuIcon } from "lucide-react";
 const MobileNavbar: React.FC<PropsWithChildren> = ({ children }) => {
   const [isOpened, setIsOpened] = useState(false);
   return (
-    <div className="block border-separate bg-background md:hidden">
+    <div className="block border-separate bg-primary md:hidden">
       <Sheet open={isOpened} onOpenChange={setIsOpened}>
         <SheetTrigger asChild>
           <Button
@@ -27,7 +27,10 @@ const MobileNavbar: React.FC<PropsWithChildren> = ({ children }) => {
             <MenuIcon aria-hidden="true" className="h-6 w-6" />
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-[400px] sm:w-[540px]" side={"left"}>
+        <SheetContent
+          className="w-[400px] sm:w-[540px] bg-primary"
+          side={"left"}
+        >
           <SheetHeader>
             <SheetTitle asChild>
               {/* <div className="flex h-16 shrink-0 items-center">

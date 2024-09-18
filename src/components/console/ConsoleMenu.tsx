@@ -8,7 +8,7 @@ import UserMenu from "./UserMenu";
 const ConsoleMenu = () => {
   const pathname = usePathname();
   return (
-    <nav className="flex flex-1 flex-col px-4">
+    <nav className="flex flex-1 flex-col px-4 bg-primary">
       <ul role="list" className="flex flex-1 flex-col gap-y-7">
         <li>
           <ul role="list" className="-mx-2 space-y-3">

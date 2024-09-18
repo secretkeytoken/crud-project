@@ -39,7 +39,7 @@ const ConsoleLayout: React.FC<PropsWithChildren> = async ({ children }) => {
         </div>
 
         <div className="lg:pl-64">
-          <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 shadow-sm sm:gap-x-6 border-b border-darkGreen px-4 sm:px-6 lg:px-8">
+          <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 shadow-sm sm:gap-x-6 border-b border-darkGreen px-4 sm:px-6 lg:px-8 bg-background">
             <MobileNavbar>
               <ProjectSelection className="w-full" />
               <ConsoleMenu />
