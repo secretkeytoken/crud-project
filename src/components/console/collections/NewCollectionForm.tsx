@@ -103,7 +103,7 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
 
             await updateCollection(
               collectionId,
-              wallet.publicKey.toString(),
+              collectionMintAddress,
               imageUrl,
               uri
             );

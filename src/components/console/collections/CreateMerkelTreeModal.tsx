@@ -31,7 +31,7 @@ import {
   usePublicClient,
   useWallets,
 } from "@particle-network/connectkit";
-import { Keypair } from "@solana/web3.js";
+import { syncMerkelTreeToCollection } from "./_actions/syncMerkelTreeToCollection.action";
 
 const formSchema = z.object({
   number_of_nodes: z
@@ -78,8 +78,6 @@ const CreateMerkelTreeModal: React.FC<Props> = ({ cid }) => {
       }>(async (resolve, reject) => {
         setLoading(true);
         try {
-          const merkelTree = Keypair.generate();
-          console.log("merkelTree", merkelTree.publicKey.toString());
           const { transaction } = await createMerkelTree(
             cid,
             values.number_of_nodes
@@ -88,10 +86,11 @@ const CreateMerkelTreeModal: React.FC<Props> = ({ cid }) => {
           const wallet = primaryWallet.getWalletClient<SolanaChain>();
           const versionedInstruction =
             transformToVersionedTransaction(transaction);
-          // versionedInstruction.sign([merkelTree]);
           const signedTx = await wallet.signTransaction(versionedInstruction);
 
           const tx = await publicClient.sendTransaction(signedTx);
+
+          await syncMerkelTreeToCollection(cid);
           resolve({ tx });
         } catch (error) {
           console.error(error);
@@ -99,7 +98,7 @@ const CreateMerkelTreeModal: React.FC<Props> = ({ cid }) => {
         }
       }),
       {
-        loading: "Creating Merkel Tree...",
+        loading: "Creating Merkel Tree.... This may take a while. Please wait.",
         success: (res) => {
           setLoading(false);
           setOpen(false);

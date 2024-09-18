@@ -1,20 +1,43 @@
 "use server";
 import prisma from "@/lib/db";
 import { isPublicKey } from "@metaplex-foundation/umi";
+import { syncMerkelTreeToCollection } from "./syncMerkelTreeToCollection.action";
 
 export async function getCollectionByIdOrPubkey(idOrPubkey: string) {
+
   const isPubkey = isPublicKey(idOrPubkey);
+
+
+  let collection;
+
   if (isPubkey) {
-    return await prisma.collection.findFirst({
+
+    collection = await prisma.collection.findFirst({
       where: {
         publickey: idOrPubkey,
       },
     });
+
+
   } else {
-    return await prisma.collection.findUnique({
+
+    collection = await prisma.collection.findUnique({
       where: {
         id: parseInt(idOrPubkey),
       },
     });
   }
+
+  if (!collection) {
+    return null;
+  }
+
+  if (!collection.merkelTree) {
+    await syncMerkelTreeToCollection(collection.id.toString());
+  }
+  return prisma.collection.findUnique({
+    where: {
+      id: collection.id,
+    },
+  });;
 }

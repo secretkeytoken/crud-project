@@ -13,8 +13,14 @@ export async function updateCollection(
   if (!session) {
     throw new Error("Unauthorized");
   }
+
+  if (!session || !session.user.id) {
+    throw new Error("Unauthorized");
+  }
+
+  const creator = session.user.id.toString();
   const collection = await prisma.collection.update({
-    where: { id: parseInt(id) },
+    where: { id: parseInt(id), creatorId: creator },
     data: {
       publickey,
       image,

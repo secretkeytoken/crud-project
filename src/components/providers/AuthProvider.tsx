@@ -81,7 +81,7 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       console.log("Wallet Disconnected. Logging out");
       logout();
     }
-  }, [isDisconnected, status, address, session?.user.id, login]);
+  }, [isDisconnected, status, address, session?.user.id, logout]);
 
   return (
     <AuthContext.Provider
