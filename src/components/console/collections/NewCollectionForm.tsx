@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { Loader2 } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 import { createCollection } from "./_actions/createCollection.action";
 import {
   SolanaChain,
@@ -61,10 +61,12 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
     defaultValues: {
       name: "",
       description: "",
-      website: "https://yourwebsite.com",
+      website: "",
       image: "",
     },
   });
+
+  const imageSelected = form.watch("image");
 
   const handleSubmit = useCallback(
     async (values: FormSchemaType) => {
@@ -122,11 +124,11 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-5 flex flex-col h-full overflow-auto border ms:p-5 md:p-10 gap-5"
+        className="space-y-5 flex flex-col h-full overflow-auto  border-lightGreen gap-5 rounded-lg"
       >
         <div className="flex-grow">
-          <div className="md:grid md:grid-cols-2 md:gap-10">
-            <div>
+          <div className="lg:grid lg:grid-cols-3 md:gap-10">
+            <div className="lg:col-span-2">
               <FormField
                 control={form.control}
                 name="name"
@@ -185,7 +187,6 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
                       <FormLabel>Collection image</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="e.g. https://..."
                           type="file"
                           {...fieldProps}
                           className="hidden"
@@ -202,11 +203,11 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
                   )}
                 />
               </div>
-              {form.getValues("image") ? (
+              {imageSelected ? (
                 <div className="size-60 border border-lightGreen border-dashed flex justify-center items-center text-sm bg-lightGreen/10 cursor-pointer hover:bg-lightGreen/30 transition-colors duration-500">
                   <img
                     className="w-full h-full max-w-full object-cover"
-                    src={URL.createObjectURL(form.getValues("image"))}
+                    src={URL.createObjectURL(imageSelected)}
                     alt="collection image"
                   />
                 </div>
@@ -222,11 +223,25 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
           </div>
         </div>
 
-        <div className="flex-none border-t">
-          <Button type="submit" disabled={loading} size={"lg"}>
-            {loading ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
-            Save
-          </Button>
+        <div className="flex-none">
+          <div className="flex justify-end gap-5">
+            <Button type="submit" disabled={loading} size={"lg"}>
+              {loading ? (
+                <Loader2 className="size-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="size-4 mr-2" />
+              )}
+              Save
+            </Button>
+            <Button type="submit" disabled={loading} size={"lg"}>
+              {loading ? (
+                <Loader2 className="size-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="size-4 mr-2" />
+              )}
+              Save
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

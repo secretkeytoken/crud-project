@@ -4,16 +4,21 @@ import React from "react";
 import { Button } from "../ui/button";
 import { Loader2, UserCircle, Wallet } from "lucide-react";
 import { useAuthProvider } from "../providers/AuthProvider";
-import { useSession } from "next-auth/react";
 
 type Props = {
   label?: string;
 };
 const AuthButton: React.FC<Props> = ({ label }) => {
-  const { data: session } = useSession();
   const { isConnected, address, isConnecting } = useAccount();
-  const { setOpen } = useModal();
-  const { loading } = useAuthProvider();
+  const { setOpen } = useModal({
+    onDisconnect() {
+      console.log("Disconnected");
+    },
+    onConnect({ address, connectorId }) {
+      console.log("Connected", address, connectorId);
+    },
+  });
+  const { loading, session } = useAuthProvider();
 
   if (isConnected && session) {
     return (
