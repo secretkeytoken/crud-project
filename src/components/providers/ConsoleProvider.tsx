@@ -1,7 +1,8 @@
 "use client";
 import { ProjectItemType } from "@/types/Project.type";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import { useAuthProvider } from "./AuthProvider";
 
 const ConsoleContext = React.createContext<{
   selectedProject: ProjectItemType | undefined;
@@ -15,6 +16,12 @@ const ConsoleProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [selectedProject, setSelectedProject] = useLocalStorage<
     ProjectItemType | undefined
   >("project", undefined);
+
+  const { session } = useAuthProvider();
+
+  useEffect(() => {
+    console.log("session", session);
+  }, [session]);
 
   return (
     <ConsoleContext.Provider
