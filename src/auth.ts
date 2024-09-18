@@ -123,8 +123,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     session: async ({ session, token }) => {
+      // console.log({ session, token });
       // console.log({ session, user, token });
       if (session.user) {
+        session.user.id = token.id as string;
         session.user.publickey = token.sub || null;
         session.user.image = `https://ui-avatars.com/api/?name=${token.sub}`;
       }

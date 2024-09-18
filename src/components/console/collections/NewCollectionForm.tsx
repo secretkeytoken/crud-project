@@ -27,6 +27,7 @@ import {
 import { transformToVersionedTransaction } from "@/lib/utils";
 import { toast } from "sonner";
 import { updateCollection } from "./_actions/updateCollection.action";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -53,6 +54,7 @@ type Props = {
   callbackFn?: () => void;
 };
 const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
+  const queryClient = useQueryClient();
   const [primaryWallet] = useWallets();
   const publicClient = usePublicClient<SolanaChain>();
   const [loading, setLoading] = useState(false);
@@ -91,11 +93,12 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
               collectionId,
               imageUrl,
               uri,
-            } = await createCollection(wallet.publicKey.toString(), formData);
+            } = await createCollection(formData);
 
             const signedTx = await wallet.signTransaction(
               transformToVersionedTransaction(transaction)
             );
+
             const tx = await publicClient.sendTransaction(signedTx);
 
             await updateCollection(
@@ -111,9 +114,12 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
         }),
         {
           loading: "Creating collection...",
-          success: (res) => {
+          success: async (res) => {
             console.log("Transaction sent:", res);
             setLoading(false);
+            await queryClient.invalidateQueries({
+              queryKey: ["get-collections"],
+            });
             callbackFn?.();
             return `Collection created successfully! tx: ${res.tx}`;
           },
@@ -124,7 +130,7 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
         }
       );
     },
-    [callbackFn, primaryWallet, publicClient]
+    [callbackFn, primaryWallet, publicClient, queryClient]
   );
 
   const onUpload = () => {

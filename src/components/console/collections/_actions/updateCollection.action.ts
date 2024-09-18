@@ -1,4 +1,5 @@
 "use server";
+import { auth } from "@/auth";
 import prisma from "@/lib/db";
 
 export async function updateCollection(
@@ -7,6 +8,11 @@ export async function updateCollection(
   image: string,
   uri: string
 ) {
+  const session = await auth();
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
   const collection = await prisma.collection.update({
     where: { id: parseInt(id) },
     data: {

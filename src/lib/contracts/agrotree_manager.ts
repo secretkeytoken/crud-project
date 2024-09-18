@@ -5,67 +5,47 @@
  * IDL can be found at `target/idl/agrotree_manager.json`.
  */
 export type AgrotreeManager = {
-  "address": "CSMoBSBUySF6eebVKnhPWVdohn3vZDCHw6tRQkcPotdX",
-  "metadata": {
-    "name": "agrotreeManager",
-    "version": "0.1.0",
-    "spec": "0.1.0",
-    "description": "Created with Anchor"
-  },
-  "instructions": [
+  address: "39yMDf98YtULLPZxR5R6sDhBwQi7tvUJb4mUwbxsxpvx";
+  metadata: {
+    name: "agrotreeManager";
+    version: "0.1.0";
+    spec: "0.1.0";
+    description: "Created with Anchor";
+  };
+  instructions: [
     {
-      "name": "createCollection",
-      "discriminator": [
-        156,
-        251,
-        92,
-        54,
-        233,
-        2,
-        16,
-        82
-      ],
-      "accounts": [
+      name: "createCollection";
+      discriminator: [156, 251, 92, 54, 233, 2, 16, 82];
+      accounts: [
         {
-          "name": "creator",
-          "writable": true,
-          "signer": true
+          name: "creator";
+          writable: true;
+          signer: true;
         },
         {
-          "name": "collection",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: "collection";
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  99,
-                  111,
-                  108,
-                  108,
-                  101,
-                  99,
-                  116,
-                  105,
-                  111,
-                  110
-                ]
+                kind: "const";
+                value: [99, 111, 108, 108, 101, 99, 116, 105, 111, 110];
               },
               {
-                "kind": "arg",
-                "path": "cid"
+                kind: "arg";
+                path: "cid";
               }
-            ]
-          }
+            ];
+          };
         },
         {
-          "name": "collectionMint",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: "collectionMint";
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
+                kind: "const";
+                value: [
                   99,
                   111,
                   108,
@@ -81,27 +61,27 @@ export type AgrotreeManager = {
                   105,
                   110,
                   116
-                ]
+                ];
               },
               {
-                "kind": "account",
-                "path": "collection"
+                kind: "account";
+                path: "collection";
               }
-            ]
-          }
+            ];
+          };
         },
         {
-          "name": "associatedTokenAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: "associatedTokenAccount";
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "account",
-                "path": "creator"
+                kind: "account";
+                path: "creator";
               },
               {
-                "kind": "const",
-                "value": [
+                kind: "const";
+                value: [
                   6,
                   221,
                   246,
@@ -134,16 +114,16 @@ export type AgrotreeManager = {
                   255,
                   0,
                   169
-                ]
+                ];
               },
               {
-                "kind": "account",
-                "path": "collectionMint"
+                kind: "account";
+                path: "collectionMint";
               }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
+            ];
+            program: {
+              kind: "const";
+              value: [
                 140,
                 151,
                 37,
@@ -176,556 +156,454 @@ export type AgrotreeManager = {
                 233,
                 248,
                 89
-              ]
-            }
-          }
+              ];
+            };
+          };
         },
         {
-          "name": "collectionMetadata",
-          "writable": true
+          name: "collectionMetadata";
+          writable: true;
         },
         {
-          "name": "collectionEdition",
-          "writable": true
+          name: "collectionEdition";
+          writable: true;
         },
         {
-          "name": "tokenMetadataProgram",
-          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+          name: "tokenMetadataProgram";
+          address: "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
         },
         {
-          "name": "tokenProgram"
+          name: "tokenProgram";
         },
         {
-          "name": "associatedTokenProgram",
-          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+          name: "associatedTokenProgram";
+          address: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          name: "systemProgram";
+          address: "11111111111111111111111111111111";
         },
         {
-          "name": "rent",
-          "address": "SysvarRent111111111111111111111111111111111"
+          name: "rent";
+          address: "SysvarRent111111111111111111111111111111111";
         }
-      ],
-      "args": [
+      ];
+      args: [
         {
-          "name": "cid",
-          "type": "u64"
+          name: "cid";
+          type: "u64";
         },
         {
-          "name": "name",
-          "type": "string"
+          name: "name";
+          type: "string";
         },
         {
-          "name": "symbol",
-          "type": "string"
+          name: "symbol";
+          type: "string";
         },
         {
-          "name": "uri",
-          "type": "string"
+          name: "uri";
+          type: "string";
         }
-      ]
+      ];
     },
     {
-      "name": "createTree",
-      "discriminator": [
-        165,
-        83,
-        136,
-        142,
-        89,
-        202,
-        47,
-        220
-      ],
-      "accounts": [
+      name: "createTree";
+      discriminator: [165, 83, 136, 142, 89, 202, 47, 220];
+      accounts: [
         {
-          "name": "payer",
-          "writable": true,
-          "signer": true
+          name: "payer";
+          writable: true;
+          signer: true;
         },
         {
-          "name": "collection",
-          "pda": {
-            "seeds": [
+          name: "collection";
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  99,
-                  111,
-                  108,
-                  108,
-                  101,
-                  99,
-                  116,
-                  105,
-                  111,
-                  110
-                ]
+                kind: "const";
+                value: [99, 111, 108, 108, 101, 99, 116, 105, 111, 110];
               },
               {
-                "kind": "arg",
-                "path": "cid"
+                kind: "arg";
+                path: "cid";
               }
-            ]
-          }
+            ];
+          };
         },
         {
-          "name": "mtree",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: "mtree";
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  109,
-                  116,
-                  114,
-                  101,
-                  101
-                ]
+                kind: "const";
+                value: [109, 116, 114, 101, 101];
               },
               {
-                "kind": "account",
-                "path": "collection"
+                kind: "account";
+                path: "collection";
               }
-            ]
-          }
+            ];
+          };
         },
         {
-          "name": "treeConfig",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: "treeConfig";
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "account",
-                "path": "merkleTree"
+                kind: "account";
+                path: "merkleTree";
               }
-            ],
-            "program": {
-              "kind": "account",
-              "path": "mplBubblegumProgram"
-            }
-          }
+            ];
+            program: {
+              kind: "account";
+              path: "mplBubblegumProgram";
+            };
+          };
         },
         {
-          "name": "merkleTree",
-          "writable": true,
-          "signer": true
+          name: "merkleTree";
+          writable: true;
+          signer: true;
         },
         {
-          "name": "mplBubblegumProgram",
-          "address": "BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY"
+          name: "mplBubblegumProgram";
+          address: "BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY";
         },
         {
-          "name": "splCompressionProgram",
-          "address": "cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"
+          name: "splCompressionProgram";
+          address: "cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK";
         },
         {
-          "name": "logWrapperProgram",
-          "address": "noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"
+          name: "logWrapperProgram";
+          address: "noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV";
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          name: "systemProgram";
+          address: "11111111111111111111111111111111";
         }
-      ],
-      "args": [
+      ];
+      args: [
         {
-          "name": "cid",
-          "type": "u64"
+          name: "cid";
+          type: "u64";
         },
         {
-          "name": "maxDepth",
-          "type": "u32"
+          name: "maxDepth";
+          type: "u32";
         },
         {
-          "name": "maxBufferSize",
-          "type": "u32"
+          name: "maxBufferSize";
+          type: "u32";
         }
-      ]
+      ];
     },
     {
-      "name": "initialize",
-      "discriminator": [
-        175,
-        175,
-        109,
-        31,
-        13,
-        152,
-        155,
-        237
-      ],
-      "accounts": [
+      name: "initialize";
+      discriminator: [175, 175, 109, 31, 13, 152, 155, 237];
+      accounts: [
         {
-          "name": "authority",
-          "writable": true,
-          "signer": true
+          name: "authority";
+          writable: true;
+          signer: true;
         },
         {
-          "name": "config",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: "config";
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  97,
-                  103,
-                  114,
-                  111,
-                  45,
-                  99,
-                  111,
-                  110,
-                  102,
-                  105,
-                  103
-                ]
+                kind: "const";
+                value: [97, 103, 114, 111, 45, 99, 111, 110, 102, 105, 103];
               }
-            ]
-          }
+            ];
+          };
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          name: "systemProgram";
+          address: "11111111111111111111111111111111";
         }
-      ],
-      "args": []
+      ];
+      args: [];
     },
     {
-      "name": "mintToCollection",
-      "discriminator": [
-        163,
-        150,
-        74,
-        141,
-        206,
-        50,
-        1,
-        195
-      ],
-      "accounts": [
+      name: "mintToCollection";
+      discriminator: [163, 150, 74, 141, 206, 50, 1, 195];
+      accounts: [
         {
-          "name": "payer",
-          "writable": true,
-          "signer": true
+          name: "payer";
+          writable: true;
+          signer: true;
         },
         {
-          "name": "collection",
-          "pda": {
-            "seeds": [
+          name: "collection";
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  99,
-                  111,
-                  108,
-                  108,
-                  101,
-                  99,
-                  116,
-                  105,
-                  111,
-                  110
-                ]
+                kind: "const";
+                value: [99, 111, 108, 108, 101, 99, 116, 105, 111, 110];
               },
               {
-                "kind": "arg",
-                "path": "cid"
+                kind: "arg";
+                path: "cid";
               }
-            ]
-          }
+            ];
+          };
         },
         {
-          "name": "mtree",
-          "pda": {
-            "seeds": [
+          name: "mtree";
+          pda: {
+            seeds: [
               {
-                "kind": "const",
-                "value": [
-                  109,
-                  116,
-                  114,
-                  101,
-                  101
-                ]
+                kind: "const";
+                value: [109, 116, 114, 101, 101];
               },
               {
-                "kind": "account",
-                "path": "collection"
+                kind: "account";
+                path: "collection";
               }
-            ]
-          }
+            ];
+          };
         },
         {
-          "name": "treeConfig",
-          "writable": true,
-          "pda": {
-            "seeds": [
+          name: "treeConfig";
+          writable: true;
+          pda: {
+            seeds: [
               {
-                "kind": "account",
-                "path": "merkleTree"
+                kind: "account";
+                path: "merkleTree";
               }
-            ],
-            "program": {
-              "kind": "account",
-              "path": "mplBubblegumProgram"
-            }
-          }
+            ];
+            program: {
+              kind: "account";
+              path: "mplBubblegumProgram";
+            };
+          };
         },
         {
-          "name": "merkleTree",
-          "writable": true
+          name: "merkleTree";
+          writable: true;
         },
         {
-          "name": "leafOwner"
+          name: "leafOwner";
         },
         {
-          "name": "leafDelegate"
+          name: "leafDelegate";
         },
         {
-          "name": "collectionMint"
+          name: "collectionMint";
         },
         {
-          "name": "collectionMetadata",
-          "writable": true
+          name: "collectionMetadata";
+          writable: true;
         },
         {
-          "name": "collectionEdition",
-          "docs": [
-            "CHECK"
-          ],
-          "writable": true
+          name: "collectionEdition";
+          docs: ["CHECK"];
+          writable: true;
         },
         {
-          "name": "mplBubblegumProgram",
-          "address": "BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY"
+          name: "mplBubblegumProgram";
+          address: "BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY";
         },
         {
-          "name": "splCompressionProgram",
-          "address": "cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"
+          name: "splCompressionProgram";
+          address: "cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK";
         },
         {
-          "name": "logWrapperProgram",
-          "address": "noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"
+          name: "logWrapperProgram";
+          address: "noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV";
         },
         {
-          "name": "tokenMetadataProgram",
-          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+          name: "tokenMetadataProgram";
+          address: "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
         },
         {
-          "name": "tokenProgram"
+          name: "tokenProgram";
         },
         {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          name: "systemProgram";
+          address: "11111111111111111111111111111111";
         }
-      ],
-      "args": [
+      ];
+      args: [
         {
-          "name": "cid",
-          "type": "u64"
+          name: "cid";
+          type: "u64";
         },
         {
-          "name": "name",
-          "type": "string"
+          name: "name";
+          type: "string";
         },
         {
-          "name": "symbol",
-          "type": "string"
+          name: "symbol";
+          type: "string";
         },
         {
-          "name": "uri",
-          "type": "string"
+          name: "uri";
+          type: "string";
         }
-      ]
+      ];
     }
-  ],
-  "accounts": [
+  ];
+  accounts: [
     {
-      "name": "agroTreeCollection",
-      "discriminator": [
-        179,
-        202,
-        101,
-        123,
-        73,
-        85,
-        194,
-        200
-      ]
+      name: "agroTreeCollection";
+      discriminator: [179, 202, 101, 123, 73, 85, 194, 200];
     },
     {
-      "name": "agroTreeConfig",
-      "discriminator": [
-        53,
-        171,
-        243,
-        0,
-        161,
-        92,
-        55,
-        91
-      ]
+      name: "agroTreeConfig";
+      discriminator: [53, 171, 243, 0, 161, 92, 55, 91];
     },
     {
-      "name": "mTree",
-      "discriminator": [
-        245,
-        118,
-        62,
-        198,
-        89,
-        245,
-        253,
-        94
-      ]
+      name: "mTree";
+      discriminator: [245, 118, 62, 198, 89, 245, 253, 94];
     }
-  ],
-  "errors": [
+  ];
+  errors: [
     {
-      "code": 6000,
-      "name": "customError",
-      "msg": "Custom error message"
+      code: 6000;
+      name: "customError";
+      msg: "Custom error message";
     },
     {
-      "code": 6001,
-      "name": "uriTooLong"
+      code: 6001;
+      name: "uriTooLong";
     },
     {
-      "code": 6002,
-      "name": "invalidUri"
+      code: 6002;
+      name: "invalidUri";
     },
     {
-      "code": 6003,
-      "name": "invalidNftName"
+      code: 6003;
+      name: "invalidNftName";
     },
     {
-      "code": 6004,
-      "name": "symbolTooLong"
+      code: 6004;
+      name: "symbolTooLong";
     },
     {
-      "code": 6005,
-      "name": "invalidAccountOwner"
+      code: 6005;
+      name: "invalidAccountOwner";
     },
     {
-      "code": 6006,
-      "name": "metadataAccountAlreadyInUse"
+      code: 6006;
+      name: "metadataAccountAlreadyInUse";
     },
     {
-      "code": 6007,
-      "name": "masterEditionAccountAlreadyInUse"
+      code: 6007;
+      name: "masterEditionAccountAlreadyInUse";
     },
     {
-      "code": 6008,
-      "name": "unauthorized"
+      code: 6008;
+      name: "unauthorized";
     },
     {
-      "code": 6009,
-      "name": "invalidCollectionId"
+      code: 6009;
+      name: "invalidCollectionId";
     }
-  ],
-  "types": [
+  ];
+  types: [
     {
-      "name": "agroTreeCollection",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: "agroTreeCollection";
+      type: {
+        kind: "struct";
+        fields: [
           {
-            "name": "id",
-            "type": "u64"
+            name: "id";
+            type: "u64";
           },
           {
-            "name": "creator",
-            "type": "pubkey"
+            name: "creator";
+            type: "pubkey";
           },
           {
-            "name": "mint",
-            "type": "pubkey"
+            name: "mint";
+            type: "pubkey";
           },
           {
-            "name": "metadata",
-            "type": "pubkey"
+            name: "metadata";
+            type: "pubkey";
           },
           {
-            "name": "masterEdition",
-            "type": "pubkey"
+            name: "masterEdition";
+            type: "pubkey";
           },
           {
-            "name": "bump",
-            "type": "u8"
+            name: "bump";
+            type: "u8";
           }
-        ]
-      }
+        ];
+      };
     },
     {
-      "name": "agroTreeConfig",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: "agroTreeConfig";
+      type: {
+        kind: "struct";
+        fields: [
           {
-            "name": "admin",
-            "type": "pubkey"
+            name: "admin";
+            type: "pubkey";
           },
           {
-            "name": "bump",
-            "type": "u8"
+            name: "bump";
+            type: "u8";
           }
-        ]
-      }
+        ];
+      };
     },
     {
-      "name": "mTree",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: "mTree";
+      type: {
+        kind: "struct";
+        fields: [
           {
-            "name": "creator",
-            "type": "pubkey"
+            name: "creator";
+            type: "pubkey";
           },
           {
-            "name": "collection",
-            "type": "pubkey"
+            name: "collection";
+            type: "pubkey";
           },
           {
-            "name": "merkleTree",
-            "type": "pubkey"
+            name: "merkleTree";
+            type: "pubkey";
           },
           {
-            "name": "treeConfig",
-            "type": "pubkey"
+            name: "treeConfig";
+            type: "pubkey";
           },
           {
-            "name": "bump",
-            "type": "u8"
+            name: "bump";
+            type: "u8";
           }
-        ]
-      }
+        ];
+      };
     }
-  ],
-  "constants": [
+  ];
+  constants: [
     {
-      "name": "collectionMintSeed",
-      "type": "bytes",
-      "value": "[99, 111, 108, 108, 101, 99, 116, 105, 111, 110, 45, 109, 105, 110, 116]"
+      name: "collectionMintSeed";
+      type: "bytes";
+      value: "[99, 111, 108, 108, 101, 99, 116, 105, 111, 110, 45, 109, 105, 110, 116]";
     },
     {
-      "name": "collectionSeed",
-      "type": "bytes",
-      "value": "[99, 111, 108, 108, 101, 99, 116, 105, 111, 110]"
+      name: "collectionSeed";
+      type: "bytes";
+      value: "[99, 111, 108, 108, 101, 99, 116, 105, 111, 110]";
     },
     {
-      "name": "configSeed",
-      "type": "bytes",
-      "value": "[97, 103, 114, 111, 45, 99, 111, 110, 102, 105, 103]"
+      name: "configSeed";
+      type: "bytes";
+      value: "[97, 103, 114, 111, 45, 99, 111, 110, 102, 105, 103]";
     },
     {
-      "name": "mtreeSeed",
-      "type": "bytes",
-      "value": "[109, 116, 114, 101, 101]"
+      name: "mtreeSeed";
+      type: "bytes";
+      value: "[109, 116, 114, 101, 101]";
     }
-  ]
+  ];
 };

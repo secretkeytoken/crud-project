@@ -1,4 +1,5 @@
 import { getCollectionByIdOrPubkey } from "@/components/console/collections/_actions/getCollectionByIdOrPubkey";
+import CreateMerkelTreeModal from "@/components/console/collections/CreateMerkelTreeModal";
 import HeaderPage from "@/components/layout/HeaderPage";
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
@@ -10,6 +11,10 @@ type Props = {
 };
 const CollectionDetailPage: React.FC<Props> = async ({ params: { id } }) => {
   const collection = await getCollectionByIdOrPubkey(id);
+
+  if (!collection) {
+    return null;
+  }
   return (
     <div>
       <HeaderPage
@@ -25,16 +30,21 @@ const CollectionDetailPage: React.FC<Props> = async ({ params: { id } }) => {
                 width={56}
                 height={56}
                 alt={"collection image"}
-                className="rounded-lg w-full h-full object-cover"
+                className="rounded-lg w-full h-full object-cover size-14"
               />
             ) : (
-              <ImageIcon className="size-11 rounded-lg" />
+              <ImageIcon className="size-14 rounded-lg" />
             )}
           </div>
         }
       />
-      <div>CollectionDetailPage {id}</div>
-      <pre>{JSON.stringify(collection, null, 2)}</pre>
+      <div className="py-10">
+        {!collection.merkelTree ? (
+          <CreateMerkelTreeModal cid={collection.id.toString()} />
+        ) : (
+          <pre>{JSON.stringify(collection, null, 2)}</pre>
+        )}
+      </div>
     </div>
   );
 };

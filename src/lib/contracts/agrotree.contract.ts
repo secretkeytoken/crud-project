@@ -1,16 +1,34 @@
 import { Program, BN } from "@coral-xyz/anchor";
-import { ComputeBudgetProgram, Connection, PublicKey } from "@solana/web3.js";
+import {
+  ComputeBudgetProgram,
+  Connection,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+} from "@solana/web3.js";
 import appConfig from "../config";
 import idl from "./agrotree_manager.json";
 import { AgrotreeManager } from "./agrotree_manager";
-import { MakeCreateCollectionInstructionInput } from "@/types/Collection.type";
+import {
+  MakeCreateCollectionInstructionInput,
+  MakeCreateMerkelTreeInstructionInput,
+} from "@/types/Collection.type";
 import { TOKEN_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import {
   EDITION_SEED,
   METADATA_SEED,
   TOKEN_METADATA_PROGRAM_ID,
 } from "../constants";
-import { buildTransaction } from "../utils";
+import {
+  buildTransaction,
+  buildTransactionWithSigner,
+  getTreeOptions,
+} from "../utils";
+
+import {
+  getMerkleTreeSize,
+  SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
+} from "@metaplex-foundation/mpl-bubblegum";
 
 export function getAgrotreeProgram() {
   const connection = new Connection(appConfig.endpointRpc, "confirmed");
@@ -18,6 +36,66 @@ export function getAgrotreeProgram() {
   const program = new Program(idl as AgrotreeManager, { connection });
 
   return { program, connection };
+}
+
+export async function makeCreateMerkelTreeInstruction(
+  input: MakeCreateMerkelTreeInstructionInput
+) {
+  const { program, connection } = getAgrotreeProgram();
+  const { collectionId, creator, numOfNodes } = input;
+
+  const merkleTree = Keypair.generate();
+  const treeOptions = getTreeOptions(numOfNodes ?? 0);
+  const merkleTreeSize = getMerkleTreeSize(
+    treeOptions.maxDepth,
+    treeOptions.maxBufferSize,
+    treeOptions.canopyDepth
+  );
+
+  console.log("merkleTreeSize", merkleTreeSize);
+  const lamports = await connection.getMinimumBalanceForRentExemption(
+    merkleTreeSize
+  );
+  console.log("lamports", lamports);
+
+  const initTreeInstruction = SystemProgram.createAccount({
+    fromPubkey: new PublicKey(creator),
+    newAccountPubkey: merkleTree.publicKey,
+    lamports,
+    space: merkleTreeSize,
+    programId: new PublicKey(SPL_ACCOUNT_COMPRESSION_PROGRAM_ID),
+  });
+
+  const instruction = await program.methods
+    .createTree(
+      new BN(collectionId),
+      treeOptions.maxDepth,
+      treeOptions.maxBufferSize
+    )
+    .accounts({
+      merkleTree: merkleTree.publicKey,
+      payer: new PublicKey(creator),
+    })
+    // .preInstructions([
+    //   ComputeBudgetProgram.setComputeUnitLimit({ units: 10_000_000 }),
+    //   initTreeInstruction,
+    // ])
+    .instruction();
+
+  const transaction = await buildTransactionWithSigner(
+    connection,
+    [initTreeInstruction, instruction],
+    creator,
+    [merkleTree]
+  );
+  // transaction.sign([merkleTree]);
+  const result = Buffer.from(transaction.serialize()).toString("base64");
+
+  return {
+    transaction: result,
+    collectionId: collectionId,
+    merkleTreeAddress: merkleTree.publicKey.toString(),
+  };
 }
 
 export async function makeCreateCollectionInstruction(
