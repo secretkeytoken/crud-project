@@ -1,4 +1,5 @@
 import { getCollectionByIdOrPubkey } from "@/components/console/collections/_actions/getCollectionByIdOrPubkey";
+import CollectionActionMemu from "@/components/console/collections/CollectionActionMemu";
 import CreateMerkelTreeModal from "@/components/console/collections/CreateMerkelTreeModal";
 import HeaderPage from "@/components/layout/HeaderPage";
 import { ImageIcon } from "lucide-react";
@@ -37,6 +38,7 @@ const CollectionDetailPage: React.FC<Props> = async ({ params: { id } }) => {
             )}
           </div>
         }
+        end={<CollectionActionMemu collectionId={collection.id} />}
       />
       <div className="py-10">
         {!collection.merkelTree ? (

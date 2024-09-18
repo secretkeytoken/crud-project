@@ -76,7 +76,7 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     // if (isDisconnected && status === "authenticated") {
-    console.log(address, session?.user.id, address !== session?.user.id);
+    // console.log(address, session?.user.id, address !== session?.user.id);
     if (session?.user.id && address !== session?.user.id) {
       console.log("Wallet Disconnected. Logging out");
       logout();
