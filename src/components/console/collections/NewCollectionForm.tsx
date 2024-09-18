@@ -109,6 +109,7 @@ const NewCollectionForm: React.FC<Props> = ({ callbackFn }) => {
             );
             resolve({ tx, collection: collectionMintAddress });
           } catch (error) {
+            console.error("Error creating collection", error);
             reject(error);
           }
         }),

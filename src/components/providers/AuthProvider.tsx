@@ -29,7 +29,10 @@ const AuthContext = React.createContext<AuthContextType>({
   loading: false,
 });
 const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession() as {
+    data: Session | null;
+    status: string;
+  };
   const { disconnectAsync } = useDisconnect();
   const { isConnected, address, isDisconnected } = useAccount();
   const [loading, setLoading] = useState(false);
@@ -72,11 +75,13 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, [isConnected, status, login]);
 
   useEffect(() => {
-    if (isDisconnected && status === "authenticated") {
+    // if (isDisconnected && status === "authenticated") {
+    console.log(address, session?.user.id, address !== session?.user.id);
+    if (session?.user.id && address !== session?.user.id) {
       console.log("Wallet Disconnected. Logging out");
-      signOut();
+      logout();
     }
-  }, [isDisconnected, status]);
+  }, [isDisconnected, status, address, session?.user.id]);
 
   return (
     <AuthContext.Provider

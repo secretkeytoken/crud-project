@@ -68,7 +68,7 @@ const CollectionsPage = () => {
                         width={44}
                         height={44}
                         alt={"collection image"}
-                        className="rounded-lg"
+                        className="rounded-lg aspect-square object-cover"
                       />
                     ) : (
                       <ImageIcon className="size-11 rounded-lg" />
