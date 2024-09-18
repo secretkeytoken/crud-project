@@ -10,7 +10,7 @@ const appConfig = {
     ? new URL(`https://${process.env.NEXT_PUBLIC_HOST}`)
     : new URL(`http://localhost:${process.env.PORT || 3005}`),
   endpointRpc:
-    "https://devnet-rpc.shyft.to/?api_key=037o0cpTSD8FBXv7" ||
+    process.env.NEXT_PUBLIC_CLUSTER_URL ||
     clusterApiUrl("devnet"),
 };
 
