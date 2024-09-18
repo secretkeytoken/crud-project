@@ -185,3 +185,70 @@ export const getTreeOptions = (treeNodes: number) => {
     canopyDepth: maxCanopyDepth - 3 >= 0 ? maxCanopyDepth - 3 : 0,
   };
 };
+
+import Papa from 'papaparse';
+import { NftMetadataType } from "@/types/Metadata.type";
+
+
+export const convertMetadataToJson = async (metadataFile: File, header = false) => {
+  const metadataContent = await metadataFile.text();
+  const { data: metadataJson } = Papa.parse<NftMetadataType>(metadataContent, {
+    skipEmptyLines: true,
+    header,
+  });
+
+  return metadataJson;
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const checkIfMetadataValid = async (metadataFile: File, mediaFiles: FileList) => {
+  const metadataJson = await convertMetadataToJson(metadataFile, true);
+
+  const metadataLeng = metadataJson.length;
+  const mediaFilesLeng = mediaFiles.length;
+
+  if (metadataLeng !== mediaFilesLeng) {
+    return "Metadata and media files count mismatch.";
+  }
+
+  // Check if media files include all the files mentioned in column 'image' of metadata
+  const mediaFileNames = Array.from(mediaFiles).map((file) => file.name);
+  const metadataFileNames = metadataJson.map((item) => item.image);
+
+  for (const metadataFileName of metadataFileNames) {
+    if (!mediaFileNames.includes(metadataFileName)) {
+      return `Metadata file and media file mismatch. ${metadataFileName} not found in media files.`;
+    }
+  }
+
+  if (metadataLeng === 0) {
+    return "No metadata files found.";
+  }
+
+  if (mediaFilesLeng === 0) {
+    return "No media files found.";
+  }
+
+  return null;
+}
+
+
+export const convertToNftMetadataJson = async (metadataFile: File) => {
+  const metadataJson = await convertMetadataToJson(metadataFile, true);
+
+  const traitTypeKeys = Object.keys(metadataJson[0]);
+
+  return metadataJson.map((item) => {
+    return {
+      name: item.name,
+      description: item.description,
+      image: item.image,
+      attributes: traitTypeKeys.filter(t => ['name', 'description', 'image'].indexOf(t) === -1).map((traitType) => {
+        return {
+          trait_type: traitType,
+          value: item[traitType],
+        };
+      }),
+    }
+  });
+
+}

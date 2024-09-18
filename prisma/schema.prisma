@@ -14,18 +14,19 @@ datasource db {
 }
 
 model User {
-  id         String       @id
-  name       String?
-  email      String?
-  fullname   String?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  isKyced    Boolean      @default(false)
-  Collection Collection[]
+  id          String        @id
+  name        String?
+  email       String?
+  fullname    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isKyced     Boolean       @default(false)
+  Collection  Collection[]
+  NftMetadata NftMetadata[]
 }
 
 model Collection {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   publickey   String?
   merkelTree  String?
   name        String
@@ -33,7 +34,21 @@ model Collection {
   website     String?
   image       String?
   uri         String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime      @default(now())
   creatorId   String
-  creator     User     @relation(fields: [creatorId], references: [id])
+  creator     User          @relation(fields: [creatorId], references: [id])
+  NftMetadata NftMetadata[]
+}
+
+model NftMetadata {
+  id           String     @id @default(cuid())
+  name         String
+  description  String
+  image        String
+  metadata     Json
+  collectionId Int
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  createdAt    DateTime   @default(now())
+  creatorId    String
+  creator      User       @relation(fields: [creatorId], references: [id])
 }
