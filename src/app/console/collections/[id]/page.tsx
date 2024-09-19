@@ -38,7 +38,11 @@ const CollectionDetailPage: React.FC<Props> = async ({ params: { id } }) => {
             )}
           </div>
         }
-        end={<CollectionActionMemu collectionId={collection.id} />}
+        end={
+          collection.merkelTree ? (
+            <CollectionActionMemu collectionId={collection.id} />
+          ) : null
+        }
       />
       <div className="py-10">
         {!collection.merkelTree ? (

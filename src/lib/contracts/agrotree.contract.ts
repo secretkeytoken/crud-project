@@ -12,6 +12,7 @@ import { AgrotreeManager } from "./agrotree_manager";
 import {
   MakeCreateCollectionInstructionInput,
   MakeCreateMerkelTreeInstructionInput,
+  MakeMintNftTreeInstructionInput,
 } from "@/types/Collection.type";
 import { TOKEN_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import {
@@ -52,11 +53,9 @@ export async function makeCreateMerkelTreeInstruction(
     treeOptions.canopyDepth
   );
 
-
   const lamports = await connection.getMinimumBalanceForRentExemption(
     merkleTreeSize
   );
-
 
   const initTreeInstruction = SystemProgram.createAccount({
     fromPubkey: new PublicKey(creator),
@@ -135,6 +134,58 @@ export async function makeCreateCollectionInstruction(
   };
 }
 
+export async function makeMintNftTreeInstruction(
+  input: MakeMintNftTreeInstructionInput
+) {
+  const { creator, collectionId, name, symbol, uri, merkleTree } = input;
+  const { program, connection } = getAgrotreeProgram();
+  const cid = new BN(collectionId);
+  const collectionAddress = getCollectionAddress(cid);
+  const collectionMintAddress = getCollectionMintAddress(
+    program.programId,
+    collectionAddress
+  );
+  const { masterEdition, tokenMetadata } = getCollectionMintMetaAccount(
+    collectionMintAddress
+  );
+  // const mtree = getMTreeAddress(collectionAddress);
+  // console.log({
+  //   collectionAddress: collectionAddress.toBase58(),
+  //   collectionMintAddress: collectionMintAddress.toBase58(),
+  //   collectionId,
+  //   name,
+  //   symbol,
+  //   uri,
+  //   mtree: mtree.toBase58(),
+  // });
+
+  const instruction = await program.methods
+    .mintToCollection(cid, name, symbol, uri)
+    .accounts({
+      payer: new PublicKey(creator),
+      collectionMint: collectionMintAddress,
+      collectionMetadata: tokenMetadata,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      collectionEdition: masterEdition,
+      merkleTree: new PublicKey(merkleTree),
+      leafOwner: new PublicKey(creator),
+      leafDelegate: new PublicKey(creator),
+    })
+    .instruction();
+
+  const transaction = await buildTransaction(
+    connection,
+    [instruction],
+    creator
+  );
+
+  const result = Buffer.from(transaction.serialize()).toString("base64");
+
+  return {
+    transaction: result,
+  };
+}
+
 export const getConfigAddress = (programId: PublicKey) =>
   PublicKey.findProgramAddressSync([Buffer.from("agro-config")], programId);
 
@@ -143,7 +194,7 @@ export const getCollectionAddress = (id: BN) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("collection"), id.toArrayLike(Buffer, "le", 8)],
     program.programId
-  )[0]
+  )[0];
 };
 
 export const getCollectionMintAddress = (
@@ -178,11 +229,10 @@ export const getCollectionMintMetaAccount = (collectionMint: PublicKey) => {
   return { collectionMint, tokenMetadata, masterEdition };
 };
 
-
 export const getMTreeAddress = (collection: PublicKey) => {
   const { program } = getAgrotreeProgram();
   return PublicKey.findProgramAddressSync(
     [Buffer.from("mtree"), collection.toBuffer()],
     program.programId
   )[0];
-}
+};

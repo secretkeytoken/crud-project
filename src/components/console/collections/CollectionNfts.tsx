@@ -17,7 +17,6 @@ const CollectionNfts: React.FC<Props> = ({ collectionId }) => {
     return <div>Loading...</div>;
   }
 
-  console.log(data);
   return (
     <div>
       <DataTable columns={columns} data={data} />

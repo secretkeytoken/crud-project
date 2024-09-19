@@ -30,11 +30,10 @@ export async function syncMerkelTreeToCollection(collectionId: string) {
 
   const collectionAddress = getCollectionAddress(new BN(collectionId));
 
-  let mTreeAddress = null;
   if (!currentCollection.merkelTree) {
     const { program } = getAgrotreeProgram();
 
-    mTreeAddress = getMTreeAddress(collectionAddress).toString();
+    const mTreeAddress = getMTreeAddress(collectionAddress).toString();
 
     try {
       const mTreeAccount = await program.account.mTree.fetch(
@@ -44,21 +43,21 @@ export async function syncMerkelTreeToCollection(collectionId: string) {
       if (!collectionAddress.equals(mTreeAccount.collection)) {
         throw new Error("Invalid Merkel Tree");
       }
-    } catch (error) {
-      mTreeAddress = null;
-    }
-  }
-  const creator = session.user.id.toString();
 
-  await prisma.collection.update({
-    where: {
-      id: parseInt(collectionId),
-      creatorId: creator,
-    },
-    data: {
-      merkelTree: mTreeAddress,
-    },
-  });
+      const merkelTree = mTreeAccount.merkleTree;
+      const creator = session.user.id.toString();
+
+      await prisma.collection.update({
+        where: {
+          id: parseInt(collectionId),
+          creatorId: creator,
+        },
+        data: {
+          merkelTree: merkelTree?.toString(),
+        },
+      });
+    } catch (error) {}
+  }
 
   revalidatePath("/console/collections/" + collectionAddress.toString());
 

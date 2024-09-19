@@ -17,7 +17,7 @@ export async function getCollectionByIdOrPubkey(idOrPubkey: string) {
   } else {
     collection = await prisma.collection.findFirst({
       where: {
-        id: parseInt(idOrPubkey),
+        id: { equals: parseInt(idOrPubkey) },
       },
     });
   }

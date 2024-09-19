@@ -13,3 +13,12 @@ export type MakeCreateMerkelTreeInstructionInput = {
   collectionId: string;
   numOfNodes: number;
 };
+
+export type MakeMintNftTreeInstructionInput = {
+  creator: PublicKey | string;
+  merkleTree: PublicKey | string;
+  collectionId: string;
+  name: string;
+  symbol: string;
+  uri: string;
+};

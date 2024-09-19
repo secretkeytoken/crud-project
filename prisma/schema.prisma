@@ -51,4 +51,8 @@ model NftMetadata {
   createdAt    DateTime   @default(now())
   creatorId    String
   creator      User       @relation(fields: [creatorId], references: [id])
+  minted       Boolean    @default(false)
+  assetId      String?
+  address      String?
+  uri          String?
 }
