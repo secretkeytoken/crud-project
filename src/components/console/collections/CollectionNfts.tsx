@@ -20,7 +20,6 @@ const CollectionNfts: React.FC<Props> = ({ collectionId }) => {
   console.log(data);
   return (
     <div>
-      CollectionNfts {collectionId}
       <DataTable columns={columns} data={data} />
     </div>
   );

@@ -19,5 +19,12 @@ export async function getCollection() {
         not: null,
       },
     },
+    include: {
+      NftMetadata: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 }

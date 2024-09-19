@@ -13,7 +13,6 @@ type Props = {
 };
 const CollectionDetailPage: React.FC<Props> = async ({ params: { id } }) => {
   const collection = await getCollectionByIdOrPubkey(id);
-
   if (!collection) {
     return null;
   }

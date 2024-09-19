@@ -33,5 +33,12 @@ export async function getCollectionByIdOrPubkey(idOrPubkey: string) {
     where: {
       id: collection.id,
     },
+    include: {
+      NftMetadata: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 }

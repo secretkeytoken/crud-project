@@ -89,7 +89,9 @@ const CollectionsPage = () => {
                     </Link>
                   ) : null}
                 </TableCell>
-                <TableCell className="text-right">-</TableCell>
+                <TableCell className="text-right">
+                  {coll.NftMetadata.length || "-"}
+                </TableCell>
                 <TableCell className="text-right">
                   {formatDateToDisplay(coll.createdAt)}
                 </TableCell>
