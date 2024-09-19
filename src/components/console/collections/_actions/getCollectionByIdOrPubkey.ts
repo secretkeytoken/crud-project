@@ -4,24 +4,18 @@ import { isPublicKey } from "@metaplex-foundation/umi";
 import { syncMerkelTreeToCollection } from "./syncMerkelTreeToCollection.action";
 
 export async function getCollectionByIdOrPubkey(idOrPubkey: string) {
-
   const isPubkey = isPublicKey(idOrPubkey);
-
 
   let collection;
 
   if (isPubkey) {
-
     collection = await prisma.collection.findFirst({
       where: {
         publickey: idOrPubkey,
       },
     });
-
-
   } else {
-
-    collection = await prisma.collection.findUnique({
+    collection = await prisma.collection.findFirst({
       where: {
         id: parseInt(idOrPubkey),
       },
@@ -39,5 +33,5 @@ export async function getCollectionByIdOrPubkey(idOrPubkey: string) {
     where: {
       id: collection.id,
     },
-  });;
+  });
 }

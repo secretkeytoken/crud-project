@@ -42,7 +42,10 @@ const BatchUploadModal: React.FC<Props> = ({ collectionId }) => {
             be successful.
           </DialogDescription>
         </DialogHeader>
-        <BatchUploadForm collectionId={collectionId} />
+        <BatchUploadForm
+          collectionId={collectionId}
+          callbackFn={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -1,36 +1,67 @@
-'use server';
+"use server";
 
+import { auth } from "@/auth";
+import prisma from "@/lib/db";
+import { getUmiServer } from "@/lib/umi";
 import { convertToNftMetadataJson } from "@/lib/utils";
+import { createGenericFileFromBrowserFile } from "@metaplex-foundation/umi";
 
 export async function uploadMetadataBundle(formData: FormData) {
-    // console.log(formData)
-    // const umi = await getUmiServer();
-    const metadataFile = formData.get("metadataFile") as File;
-    // const mediaFiles = formData.getAll("mediaFiles") as unknown as FileList;
-    const metadataJson = await convertToNftMetadataJson(metadataFile);
-    console.log({ metadataJson })
-    // const umiMetadataFile = await createGenericFileFromBrowserFile(metadataFile);
+  const session = await auth();
 
-    // {
-    //     umiMediaFilesUrl: [
-    //         'https://arweave.net/EPuXBYh7JDpQhMWanmoSq3hfJ1qgCo5CrWHvjpQXAMhn',
-    //         'https://arweave.net/Fog1c24ugqZEULVLzSkRDeg2edHw9Y9LnryHau3VcFTB',
-    //         'https://arweave.net/5K5ijWRb5WZNyoWZkexwHvPWZwSwdJa2dtzGung4DC9q'
-    //     ]
-    // }
-    // const umiMediaFiles = await Promise.all(
-    //     Array.from(mediaFiles).map((file) => createGenericFileFromBrowserFile(file))
-    // );
+  if (!session || !session.user.id) {
+    throw new Error("Unauthorized");
+  }
 
+  const creator = session.user.id.toString();
+  const collectionId = formData.get("collectionId") as string;
 
-    // console.log({ umiMetadataFile, umiMediaFiles })
+  // console.log(formData)
+  const umi = await getUmiServer();
+  const metadataFile = formData.get("metadataFile") as File;
+  const mediaFiles = formData.getAll("mediaFiles") as unknown as FileList;
+  const metadataJson = await convertToNftMetadataJson(metadataFile);
 
-    // const umiMediaFilesUrl = await umi.uploader.upload(umiMediaFiles)
+  // upload media files
+  const umiMediaFiles = await Promise.all(
+    Array.from(mediaFiles).map((file) => createGenericFileFromBrowserFile(file))
+  );
 
-    // console.log({ umiMediaFilesUrl })
+  const umiMediaFilesUrl = await umi.uploader.upload(umiMediaFiles);
+
+  const metadataJsonWithImageUrls = metadataJson.map((item, index) => {
     return {
-        success: true,
-        message: "Metadata bundle uploaded successfully.",
-        metadataJson
-    }
+      ...item,
+      image: umiMediaFilesUrl[index],
+    };
+  });
+
+  //   const umiMetadataFile = Array.from(metadataJsonWithImageUrls).map((file) =>
+  //     createGenericFileFromJson(file, `${file.name}.json`, {
+  //       contentType: "application/json",
+  //       displayName: file.name,
+  //       extension: "json",
+  //     })
+  //   );
+
+  await prisma.nftMetadata.createMany({
+    data: metadataJsonWithImageUrls.map((item) => ({
+      name: item.name,
+      description: item.description,
+      image: item.image,
+      metadata: item.attributes,
+      collectionId: parseInt(collectionId),
+      creatorId: creator,
+    })),
+  });
+
+  //   const umiMetadataFileUrl = await umi.uploader.upload(umiMetadataFile);
+
+  //   console.log({ umiMediaFilesUrl, umiMetadataFileUrl });
+
+  return {
+    success: true,
+    message: "Metadata bundle uploaded successfully.",
+    metadata: metadataJsonWithImageUrls,
+  };
 }

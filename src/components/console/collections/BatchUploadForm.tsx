@@ -62,8 +62,9 @@ type FormSchemaType = z.infer<typeof formSchema>;
 
 type Props = {
   collectionId: number;
+  callbackFn?: () => void;
 };
-const BatchUploadForm: React.FC<Props> = ({ collectionId }) => {
+const BatchUploadForm: React.FC<Props> = ({ collectionId, callbackFn }) => {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<FormSchemaType>({
@@ -96,11 +97,12 @@ const BatchUploadForm: React.FC<Props> = ({ collectionId }) => {
         formData.append("mediaFiles", file);
       });
 
-      const { metadataJson } = await uploadMetadataBundle(formData);
-      console.log({ metadataJson });
+      const { metadata } = await uploadMetadataBundle(formData);
+      console.log({ uploadedMetadata: metadata });
+      callbackFn?.();
       setLoading(false);
     },
-    [collectionId]
+    [callbackFn, collectionId]
   );
 
   const fileSelected = form.watch("metadataFile");

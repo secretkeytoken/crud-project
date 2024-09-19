@@ -1,6 +1,7 @@
 import { getCollectionByIdOrPubkey } from "@/components/console/collections/_actions/getCollectionByIdOrPubkey";
 import CollectionActionMemu from "@/components/console/collections/CollectionActionMemu";
 import CreateMerkelTreeModal from "@/components/console/collections/CreateMerkelTreeModal";
+import CollectionNfts from "@/components/console/collections/CollectionNfts";
 import HeaderPage from "@/components/layout/HeaderPage";
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
@@ -44,7 +45,7 @@ const CollectionDetailPage: React.FC<Props> = async ({ params: { id } }) => {
         {!collection.merkelTree ? (
           <CreateMerkelTreeModal cid={collection.id.toString()} />
         ) : (
-          <pre>{JSON.stringify(collection, null, 2)}</pre>
+          <CollectionNfts collectionId={collection.id.toString()} />
         )}
       </div>
     </div>
