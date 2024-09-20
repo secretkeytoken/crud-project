@@ -58,11 +58,18 @@ const NftAction: React.FC<Props> = ({ id }) => {
       }),
       {
         loading: "Minting NFT...",
-        success: async ({ tx }) => {
-          await queryClient.invalidateQueries({
-            queryKey: ["get-colletion-nfts"],
-          });
-          return `NFT minted successfully! tx: ${tx}`;
+        success: async ({ tx, success }) => {
+          if (success) {
+            await queryClient.invalidateQueries({
+              queryKey: ["get-colletion-nfts"],
+            });
+
+            await queryClient.invalidateQueries({
+              queryKey: ["fetch-merkel-tree-config"],
+            });
+            return `NFT minted successfully! tx: ${tx}`;
+          }
+          return "Error minting NFT";
         },
         error: "Error minting NFT",
       }

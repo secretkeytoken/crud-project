@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { isPublicKey } from "@metaplex-foundation/umi";
 import { syncMerkelTreeToCollection } from "./syncMerkelTreeToCollection.action";
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export async function getCollectionByIdOrPubkey(idOrPubkey: string) {
   const session = await auth();
@@ -35,7 +35,7 @@ export async function getCollectionByIdOrPubkey(idOrPubkey: string) {
   }
 
   if (!collection) {
-    return null;
+    return notFound();
   }
 
   if (!collection.merkelTree) {

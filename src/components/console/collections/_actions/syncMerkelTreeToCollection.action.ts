@@ -60,7 +60,7 @@ export async function syncMerkelTreeToCollection(collectionId: string) {
     } catch (error) {}
   }
 
-  revalidatePath(`/console/collections/${currentCollection.publickey}`);
+  revalidatePath(`/console/collections/[slug]`);
 
   return {
     status: "success",

@@ -4,10 +4,24 @@ import BatchUploadModal from "./BatchUploadModal";
 
 type Props = {
   collectionId: number;
+  nfts?: {
+    id: string;
+  }[];
+  merkleTree: string;
 };
 
-const CollectionActionMemu: React.FC<Props> = ({ collectionId }) => {
-  return <BatchUploadModal collectionId={collectionId} />;
+const CollectionActionMemu: React.FC<Props> = ({
+  collectionId,
+  nfts,
+  merkleTree,
+}) => {
+  return (
+    <BatchUploadModal
+      collectionId={collectionId}
+      nfts={nfts}
+      merkleTree={merkleTree}
+    />
+  );
   // return (
   //   <DropdownMenu>
   //     <DropdownMenuTrigger asChild>

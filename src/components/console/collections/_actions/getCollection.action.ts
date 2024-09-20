@@ -27,5 +27,8 @@ export async function getCollection() {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }

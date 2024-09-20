@@ -9,19 +9,51 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { FileStack } from "lucide-react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import BatchUploadForm from "./BatchUploadForm";
+import { useQuery } from "@tanstack/react-query";
+import useUmi from "@/hooks/useUmi";
+import { fetchTreeConfigFromSeeds } from "@metaplex-foundation/mpl-bubblegum";
+import { publicKey } from "@metaplex-foundation/umi";
 type Props = {
   collectionId: number;
+  nfts?: {
+    id: string;
+  }[];
+  merkleTree: string;
 };
-const BatchUploadModal: React.FC<Props> = ({ collectionId }) => {
+const BatchUploadModal: React.FC<Props> = ({
+  collectionId,
+  nfts,
+  merkleTree,
+}) => {
   const [open, setOpen] = useState(false);
+  const umi = useUmi();
+  const { data: treeConfig } = useQuery({
+    queryKey: ["fetch-merkel-tree-config", collectionId],
+    queryFn: async () =>
+      fetchTreeConfigFromSeeds(umi, {
+        merkleTree: publicKey(merkleTree),
+      }),
+  });
+
+  const isAvailable = useMemo(() => {
+    if ((nfts?.length || 0) >= (treeConfig?.totalMintCapacity || 0)) {
+      return false;
+    }
+    return true;
+  }, [nfts?.length, treeConfig?.totalMintCapacity]);
+
+  if (!treeConfig) {
+    return null;
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button disabled={!isAvailable}>
           <FileStack className="size-4 mr-2" />
-          Batch upload
+          {isAvailable ? "Batch upload" : "Reached limit of NFTs"}
         </Button>
       </DialogTrigger>
 

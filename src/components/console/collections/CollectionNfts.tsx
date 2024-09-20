@@ -9,7 +9,7 @@ type Props = {
 };
 const CollectionNfts: React.FC<Props> = ({ collectionId }) => {
   const { data } = useQuery({
-    queryKey: ["get-colletion-nfts", collectionId],
+    queryKey: ["get-collection-nfts", collectionId],
     queryFn: () => getCollectionNfts(collectionId),
   });
 

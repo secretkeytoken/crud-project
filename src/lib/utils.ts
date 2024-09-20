@@ -186,11 +186,13 @@ export const getTreeOptions = (treeNodes: number) => {
   };
 };
 
-import Papa from 'papaparse';
+import Papa from "papaparse";
 import { NftMetadataType } from "@/types/Metadata.type";
 
-
-export const convertMetadataToJson = async (metadataFile: File, header = false) => {
+export const convertMetadataToJson = async (
+  metadataFile: File,
+  header = false
+) => {
   const metadataContent = await metadataFile.text();
   const { data: metadataJson } = Papa.parse<NftMetadataType>(metadataContent, {
     skipEmptyLines: true,
@@ -198,9 +200,12 @@ export const convertMetadataToJson = async (metadataFile: File, header = false) 
   });
 
   return metadataJson;
-}
+};
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const checkIfMetadataValid = async (metadataFile: File, mediaFiles: FileList) => {
+export const checkIfMetadataValid = async (
+  metadataFile: File,
+  mediaFiles: FileList
+) => {
   const metadataJson = await convertMetadataToJson(metadataFile, true);
 
   const metadataLeng = metadataJson.length;
@@ -229,8 +234,7 @@ export const checkIfMetadataValid = async (metadataFile: File, mediaFiles: FileL
   }
 
   return null;
-}
-
+};
 
 export const convertToNftMetadataJson = async (metadataFile: File) => {
   const metadataJson = await convertMetadataToJson(metadataFile, true);
@@ -242,13 +246,24 @@ export const convertToNftMetadataJson = async (metadataFile: File) => {
       name: item.name,
       description: item.description,
       image: item.image,
-      attributes: traitTypeKeys.filter(t => ['name', 'description', 'image'].indexOf(t) === -1).map((traitType) => {
-        return {
-          trait_type: traitType,
-          value: item[traitType],
-        };
-      }),
-    }
+      attributes: traitTypeKeys
+        .filter((t) => ["name", "description", "image"].indexOf(t) === -1)
+        .map((traitType) => {
+          return {
+            trait_type: traitType,
+            value: item[traitType],
+          };
+        }),
+    };
   });
+};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function toObject(data: any) {
+  return JSON.parse(
+    JSON.stringify(
+      data,
+      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+    )
+  );
 }

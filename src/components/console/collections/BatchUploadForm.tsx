@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { uploadMetadataBundle } from "./_actions/uploadMetadataBundle.action";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_MEDIA_TYPES = [
@@ -65,6 +66,7 @@ type Props = {
   callbackFn?: () => void;
 };
 const BatchUploadForm: React.FC<Props> = ({ collectionId, callbackFn }) => {
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
 
   const form = useForm<FormSchemaType>({
@@ -99,10 +101,13 @@ const BatchUploadForm: React.FC<Props> = ({ collectionId, callbackFn }) => {
 
       const { metadata } = await uploadMetadataBundle(formData);
       console.log({ uploadedMetadata: metadata });
+      await queryClient.invalidateQueries({
+        queryKey: ["get-collection-nfts"],
+      });
       callbackFn?.();
       setLoading(false);
     },
-    [callbackFn, collectionId]
+    [callbackFn, collectionId, queryClient]
   );
 
   const fileSelected = form.watch("metadataFile");

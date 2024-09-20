@@ -6,6 +6,7 @@ import HeaderPage from "@/components/layout/HeaderPage";
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import CollectionMerkelTreeConfig from "@/components/console/collections/CollectionMerkelTreeConfig";
 type Props = {
   params: {
     id: string;
@@ -40,15 +41,22 @@ const CollectionDetailPage: React.FC<Props> = async ({ params: { id } }) => {
         }
         end={
           collection.merkelTree ? (
-            <CollectionActionMemu collectionId={collection.id} />
+            <CollectionActionMemu
+              collectionId={collection.id}
+              nfts={collection.NftMetadata}
+              merkleTree={collection.merkelTree}
+            />
           ) : null
         }
       />
-      <div className="py-10">
+      <div className="py-5 space-y-5">
         {!collection.merkelTree ? (
           <CreateMerkelTreeModal cid={collection.id.toString()} />
         ) : (
-          <CollectionNfts collectionId={collection.id.toString()} />
+          <>
+            <CollectionMerkelTreeConfig merkleTree={collection.merkelTree} />
+            <CollectionNfts collectionId={collection.id.toString()} />
+          </>
         )}
       </div>
     </div>

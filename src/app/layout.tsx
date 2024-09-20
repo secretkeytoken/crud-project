@@ -5,7 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import appConfig from "@/lib/config";
 import AppProvider from "@/components/providers/AppProvider";
-
+import NextTopLoader from "nextjs-toploader";
 const inter = Inter({ subsets: ["latin"] });
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -49,6 +49,7 @@ export default async function RootLayout({
           "antialiased min-h-screen"
         )}
       >
+        <NextTopLoader />
         <main className="relative flex min-h-screen flex-col">
           <AppProvider>{children}</AppProvider>
         </main>

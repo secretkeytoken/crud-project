@@ -17,5 +17,10 @@ export async function getCollectionNfts(collectionId: string) {
       collectionId: parseInt(collectionId),
       creatorId: creator,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+    ],
   });
 }
