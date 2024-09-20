@@ -6,6 +6,7 @@ import prisma from "@/lib/db";
 import { getUmiServer } from "@/lib/umi";
 import { transformIrysUrl } from "@/lib/utils";
 import { createGenericFileFromBrowserFile } from "@metaplex-foundation/umi";
+import { redirect } from "next/navigation";
 // import { BN } from "@coral-xyz/anchor";
 // import { randomBytes } from "tweetnacl";
 
@@ -13,7 +14,7 @@ export async function createCollection(formData: FormData) {
   const session = await auth();
 
   if (!session || !session.user.id) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const creator = session.user.id.toString();

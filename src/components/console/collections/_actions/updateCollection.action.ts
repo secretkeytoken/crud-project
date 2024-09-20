@@ -1,6 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import { redirect } from "next/navigation";
 
 export async function updateCollection(
   id: string,
@@ -11,11 +12,11 @@ export async function updateCollection(
   const session = await auth();
 
   if (!session) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   if (!session || !session.user.id) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const creator = session.user.id.toString();

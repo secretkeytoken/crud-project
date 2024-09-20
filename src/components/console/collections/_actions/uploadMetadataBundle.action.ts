@@ -5,12 +5,13 @@ import prisma from "@/lib/db";
 import { getUmiServer } from "@/lib/umi";
 import { convertToNftMetadataJson } from "@/lib/utils";
 import { createGenericFileFromBrowserFile } from "@metaplex-foundation/umi";
+import { redirect } from "next/navigation";
 
 export async function uploadMetadataBundle(formData: FormData) {
   const session = await auth();
 
   if (!session || !session.user.id) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const creator = session.user.id.toString();

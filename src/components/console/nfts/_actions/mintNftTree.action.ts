@@ -6,12 +6,13 @@ import prisma from "@/lib/db";
 import { getUmiServer } from "@/lib/umi";
 import { transformIrysUrl } from "@/lib/utils";
 import { createGenericFileFromJson } from "@metaplex-foundation/umi";
+import { redirect } from "next/navigation";
 
 export async function mintNftTree(nftMetadataId: string) {
   const session = await auth();
 
   if (!session || !session.user.id) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const creator = session.user.id.toString();

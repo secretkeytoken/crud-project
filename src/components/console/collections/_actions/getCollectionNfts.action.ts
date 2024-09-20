@@ -2,12 +2,13 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import { redirect } from "next/navigation";
 
 export async function getCollectionNfts(collectionId: string) {
   const session = await auth();
 
   if (!session || !session.user.id) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const creator = session.user.id.toString();

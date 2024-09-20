@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { makeCreateMerkelTreeInstruction } from "@/lib/contracts/agrotree.contract";
+import { redirect } from "next/navigation";
 
 export async function createMerkelTree(
   collectionId: string,
@@ -10,7 +11,7 @@ export async function createMerkelTree(
   const session = await auth();
 
   if (!session || !session.user.id) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const creator = session.user.id.toString();

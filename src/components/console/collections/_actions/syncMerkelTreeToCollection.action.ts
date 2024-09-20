@@ -10,12 +10,13 @@ import prisma from "@/lib/db";
 import { BN } from "@coral-xyz/anchor";
 import { publicKey } from "@metaplex-foundation/umi";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function syncMerkelTreeToCollection(collectionId: string) {
   const session = await auth();
 
   if (!session || !session.user.id) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const currentCollection = await prisma.collection.findUnique({
@@ -59,7 +60,7 @@ export async function syncMerkelTreeToCollection(collectionId: string) {
     } catch (error) {}
   }
 
-  revalidatePath("/console/collections/" + collectionAddress.toString());
+  revalidatePath(`/console/collections/${currentCollection.publickey}`);
 
   return {
     status: "success",

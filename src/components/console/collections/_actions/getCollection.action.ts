@@ -2,12 +2,13 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import { redirect } from "next/navigation";
 
 export async function getCollection() {
   const session = await auth();
 
   if (!session) {
-    throw new Error("Unauthorized");
+    redirect("/");
   }
 
   const user = session.user;

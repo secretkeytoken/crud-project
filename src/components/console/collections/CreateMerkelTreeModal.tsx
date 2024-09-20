@@ -103,7 +103,7 @@ const CreateMerkelTreeModal: React.FC<Props> = ({ cid }) => {
           setLoading(false);
           setOpen(false);
 
-          return `Collection created successfully! tx: ${res.tx}`;
+          return `Merkel Tree created successfully! tx: ${res.tx}`;
         },
         error: () => {
           setLoading(false);
