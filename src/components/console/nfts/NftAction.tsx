@@ -34,6 +34,9 @@ const NftAction: React.FC<Props> = ({ id }) => {
     toast.promise(
       new Promise<{
         tx: string;
+        assetId?: string;
+        address?: string;
+        success: boolean;
       }>(async (resolve, reject) => {
         try {
           const wallet = primaryWallet.getWalletClient<SolanaChain>();
@@ -45,9 +48,9 @@ const NftAction: React.FC<Props> = ({ id }) => {
 
           const tx = await publicClient.sendTransaction(signedTx);
 
-          await syncNftTree(id, tx);
+          const { success } = await syncNftTree(id, tx);
 
-          resolve({ tx });
+          resolve({ success, tx });
         } catch (error) {
           reject(error);
           console.error("Error minting NFT", error);

@@ -1,9 +1,13 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { getUmiServer } from "@/lib/umi";
+import { BN } from "@coral-xyz/anchor";
+import { findLeafAssetIdPda } from "@metaplex-foundation/mpl-bubblegum";
+import { publicKey } from "@metaplex-foundation/umi";
 
-// https://api.shyft.to/sol/v1/nft/compressed/read_all?network=devnet&wallet_address=519YcH3xs93ny76Zzsoxp8ZF3s9fNS1BwEB33vvBxype&collection=AVhLQ69TS3JHDtZcjqEeKxbG77fmDCfs1qVMV8ew1oCc
-export async function syncNftTree(id: string, tx: string) {
+// sync assetId and address of NFT metadata
+export async function syncNftTree(id: string, tx?: string) {
   const nftMetadata = await prisma.nftMetadata.findUnique({
     where: {
       id: id,
@@ -12,6 +16,7 @@ export async function syncNftTree(id: string, tx: string) {
       collection: {
         select: {
           publickey: true,
+          merkelTree: true,
         },
       },
     },
@@ -21,56 +26,52 @@ export async function syncNftTree(id: string, tx: string) {
     throw new Error("NFT metadata not found");
   }
 
+  const umi = await getUmiServer();
+
+  const { _max: currentNft } = await prisma.nftMetadata.aggregate({
+    // by: ["collectionId"],
+    where: {
+      collectionId: nftMetadata.collectionId,
+      address: {
+        not: null,
+      },
+      assetId: {
+        not: null,
+      },
+    },
+    _max: {
+      assetId: true,
+    },
+  });
+
+  const nextAssetIndex = new BN(currentNft.assetId || 0).add(new BN(1));
+  const assetIndex = BigInt(nextAssetIndex.toString());
+
+  const [address] = findLeafAssetIdPda(umi, {
+    merkleTree: publicKey(nftMetadata.collection.merkelTree as string),
+    leafIndex: assetIndex,
+  });
+
+  // console.log("syncNftTree", {
+  //   id,
+  //   assetIndex,
+  //   address: address.toString(),
+  // });
+
   await prisma.nftMetadata.update({
     where: {
       id: id,
     },
     data: {
-      address: tx,
+      assetId: assetIndex.toString(),
+      address,
+      tx,
     },
   });
 
   return {
+    assetId: assetIndex.toString(),
+    address,
     success: true,
   };
-
-  // console.log(
-  //   `https://api.shyft.to/sol/v1/nft/compressed/read_all?network=devnet&wallet_address=${nftMetadata?.creatorId}&collection=${nftMetadata?.collection.publickey}`
-  // );
-  // const response = await fetch(
-  //   `https://api.shyft.to/sol/v1/nft/compressed/read_all?network=devnet&wallet_address=${nftMetadata?.creatorId}&collection=${nftMetadata?.collection.publickey}`,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "x-api-key": process.env.SHYFT_API_KEY!,
-  //     },
-  //   }
-  // ).then((res) => res.json());
-
-  // console.log({ response });
-
-  // if (response.success) {
-  //   const nfts = response.result;
-
-  //   if (nfts && nfts.length > 0) {
-  //     const cnft = nfts.find(
-  //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //       (nft: any) => nft.metadata_uri === nftMetadata.uri
-  //     );
-
-  //     if (cnft) {
-  //       await prisma.nftMetadata.update({
-  //         where: {
-  //           id: id,
-  //         },
-  //         data: {
-  //           address: tx,
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
-
-  // return response;
 }

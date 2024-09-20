@@ -55,4 +55,5 @@ model NftMetadata {
   assetId      String?
   address      String?
   uri          String?
+  tx           String?
 }

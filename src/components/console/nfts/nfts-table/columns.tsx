@@ -27,6 +27,7 @@ export const columns: ColumnDef<NftMetadataDbType>[] = [
       );
     },
   },
+
   {
     accessorKey: "name",
     header: "Name",
@@ -43,6 +44,7 @@ export const columns: ColumnDef<NftMetadataDbType>[] = [
       return address ? "Minted" : "Not minted";
     },
   },
+
   {
     accessorKey: "address",
     header: "Explorer",
@@ -50,12 +52,20 @@ export const columns: ColumnDef<NftMetadataDbType>[] = [
       const address = row.getValue("address") as string;
       return (
         <a
-          href={`https://translator.shyft.to/tx/${address}?cluster=devnet`}
+          href={`https://translator.shyft.to/address/${address}?cluster=devnet`}
           target="_blank"
         >
           {truncateAddress(address)}
         </a>
       );
+    },
+  },
+  {
+    accessorKey: "assetId",
+    header: () => <div className="text-right">Asset Id</div>,
+    cell: ({ row }) => {
+      const assetId = row.getValue("assetId") as string;
+      return <div className="flex justify-end gap-3">{assetId ?? "-"}</div>;
     },
   },
   {
