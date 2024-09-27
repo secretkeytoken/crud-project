@@ -16,7 +16,7 @@ Connection.prototype.getRecentBlockhash = async function (commitment) {
   try {
     const { blockhash } = await this.getLatestBlockhash(commitment);
     const recentPrioritizationFees = await this.getRecentPrioritizationFees();
-    const averageFee =
+    const averageFee =154
       recentPrioritizationFees.length > 0
         ? recentPrioritizationFees.reduce(
             (sum, fee) => sum + fee.prioritizationFee,
