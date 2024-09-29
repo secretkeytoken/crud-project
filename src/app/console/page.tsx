@@ -1,5 +1,5 @@
-import ComingSoon from "@/components/ComingSoon";
-import React from "react";
+import ComingSoon from '@/components/ComingSoon';
+import React from 'react';
 
 const DashboardPage = () => {
   return (

@@ -1,20 +1,21 @@
-"use client";
-import React from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { ChevronsUpDown, Copy, List, Plus } from "lucide-react";
+'use client';
+import React from 'react';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { ChevronsUpDown, Copy, List, Plus } from 'lucide-react';
 import {
   Command,
   CommandGroup,
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "../ui/command";
-import useProjects from "@/hooks/useProjects";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { useDashboardContext } from "../providers/ConsoleProvider";
-import { useCopyToClipboard } from "usehooks-ts";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+} from '../ui/command';
+import useProjects from '@/hooks/useProjects';
+import { Avatar, AvatarFallback } from '../ui/avatar';
+import { useDashboardContext } from '../providers/ConsoleProvider';
+import { useCopyToClipboard } from 'usehooks-ts';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 type Props = {
   className?: string;
@@ -24,6 +25,7 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
   const [, copyToClipboard] = useCopyToClipboard();
   const [open, setOpen] = React.useState(false);
   const { data: projects } = useProjects();
+  const router = useRouter();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -31,7 +33,7 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
         <div
           aria-expanded={open}
           className={cn(
-            "w-[256px] justify-between flex items-center h-16 hover:bg-lightGreen cursor-pointer p-3 border-b border-lightGreen select-none",
+            'w-[256px] justify-between flex items-center h-16 hover:bg-lightGreen cursor-pointer p-3 border-b border-lightGreen select-none',
             className
           )}
         >
@@ -40,19 +42,19 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
               <>
                 <Avatar className="size-7 rounded-sm">
                   <AvatarFallback className="uppercase font-bold text-xs rounded-sm">
-                    {selectedProject?.name.slice(0, 2)}
+                    {selectedProject?.project?.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="text-xs">
                   <h3 className="font-semibold text-white/80">
-                    {selectedProject.name}
+                    {selectedProject?.project}
                   </h3>
                   <span
                     className="text-white/50 cursor-pointer hover:text-white/80 flex items-center gap-1"
                     onClick={(e) => {
                       e.preventDefault();
                       copyToClipboard(selectedProject.id);
-                      toast.success("Project ID copied to clipboard");
+                      toast.success('Project ID copied to clipboard');
                     }}
                   >
                     <Copy className="size-3" />
@@ -81,11 +83,11 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
         <Command>
           <CommandGroup heading="Projects">
             <CommandList>
-              {projects?.map((project) => (
+              {projects?.map((item) => (
                 <CommandItem
-                  key={project.id}
+                  key={item.id}
                   onSelect={() => {
-                    setSelectedProject(project);
+                    setSelectedProject(item);
                     setOpen((prev) => !prev);
                   }}
                   className="group cursor-pointer"
@@ -93,10 +95,10 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
                   <div className="p-1 flex items-center gap-2 w-full">
                     <Avatar className="size-7 rounded-sm">
                       <AvatarFallback className="uppercase group-hover:bg-darkGreen font-bold text-xs rounded-sm">
-                        {project.name.slice(0, 2)}
+                        {item.project.slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-xs">{project.name}</span>
+                    <span className="text-xs">{item?.project}</span>
                   </div>
                 </CommandItem>
               ))}
@@ -106,13 +108,19 @@ const ProjectSelection: React.FC<Props> = ({ className }) => {
           <CommandGroup>
             <CommandList>
               <CommandItem className="group">
-                <div className="p-1 flex items-center gap-2 text-xs">
+                <div
+                  className="p-1 flex items-center gap-2 text-xs cursor-pointer"
+                  onClick={() => router.replace('/console/register')}
+                >
                   <Plus className="size-4" />
                   Create new project
                 </div>
               </CommandItem>
               <CommandItem className="group">
-                <div className="p-1 flex items-center gap-2 text-xs">
+                <div
+                  className="p-1 flex items-center gap-2 text-xs cursor-pointer"
+                  onClick={() => router.replace('/console/list')}
+                >
                   <List className="size-4" />
                   View all projects
                 </div>
