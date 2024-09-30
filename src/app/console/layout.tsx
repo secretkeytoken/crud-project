@@ -1,14 +1,15 @@
-import { auth } from "@/auth";
-import AuthButton from "@/components/auth/AuthButton";
-import ConsoleMenu from "@/components/console/ConsoleMenu";
-import ProjectSelection from "@/components/console/ProjectSelection";
-import EndNavbarSection from "@/components/layout/EndNavbarSection";
-import MobileNavbar from "@/components/layout/MobileNavbar";
+import { auth } from '@/auth';
+import AuthButton from '@/components/auth/AuthButton';
+import ConsoleMenu from '@/components/console/ConsoleMenu';
+import ProjectSelection from '@/components/console/ProjectSelection';
+import EndNavbarSection from '@/components/layout/EndNavbarSection';
+import NextTopLoader from 'nextjs-toploader';
+import MobileNavbar from '@/components/layout/MobileNavbar';
 
-import dynamic from "next/dynamic";
-import React, { PropsWithChildren } from "react";
+import dynamic from 'next/dynamic';
+import React, { PropsWithChildren } from 'react';
 const DashboardProviderWithNoSSR = dynamic(
-  () => import("@/components/providers/ConsoleProvider"),
+  () => import('@/components/providers/ConsoleProvider'),
   {
     ssr: false,
   }
@@ -19,6 +20,7 @@ const ConsoleLayout: React.FC<PropsWithChildren> = async ({ children }) => {
     <DashboardProviderWithNoSSR>
       {/* <Navbar /> */}
       <div className="w-full relative">
+        <NextTopLoader />
         {!session ? (
           <div className="w-full h-full fixed bg-foreground/30 z-50 backdrop-blur-sm flex items-center justify-center">
             <AuthButton label="Login to continue" />
